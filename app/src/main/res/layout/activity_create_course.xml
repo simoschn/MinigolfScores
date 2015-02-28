@@ -14,42 +14,43 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText"
+            android:id="@+id/editText_club"
             android:hint="@string/club_hint" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText6"
+            android:id="@+id/editText_system"
             android:layout_gravity="center_horizontal"
             android:hint="@string/system_hint" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText2"
+            android:id="@+id/editText_street"
             android:layout_gravity="center_horizontal"
             android:hint="@string/street_hint" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText3"
+            android:id="@+id/editText_streetNumber"
             android:layout_gravity="center_horizontal"
             android:hint="@string/street_number_hint" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText4"
+            android:id="@+id/editText_zipcode"
             android:layout_gravity="center_horizontal"
             android:hint="@string/zipcode_hint" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText5"
+            android:id="@+id/editText_city"
             android:layout_gravity="center_horizontal"
             android:hint="@string/city_hint" />
+
     </LinearLayout>
 </RelativeLayout>

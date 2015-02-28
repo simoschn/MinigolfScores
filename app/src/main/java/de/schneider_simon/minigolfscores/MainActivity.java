@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class MainActivity extends ActionBarActivity {
 
-    private static final String TAG = "MinigolfScores";
+    private static final String TAG = "Main";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -13,5 +13,6 @@
     <string name="street_number_hint">Hausnummer</string>
     <string name="zipcode_hint">PLZ...</string>
     <string name="city_hint">Stadt...</string>
+    <string name="not_set">-</string>
 
 </resources>
