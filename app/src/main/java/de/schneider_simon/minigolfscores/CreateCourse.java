@@ -14,7 +14,7 @@ public class CreateCourse extends ActionBarActivity {
 
     static SQLiteDatabase db = null;
 
-    private static final String TAG = "CreateCourseTest";
+    private static final String TAG = "CreateCourseTest1234";
 
     private Course course = new Course();
 
