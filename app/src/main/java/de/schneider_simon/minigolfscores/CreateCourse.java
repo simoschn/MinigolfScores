@@ -1,5 +1,6 @@
 package de.schneider_simon.minigolfscores;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,7 +12,9 @@ import android.widget.EditText;
 
 public class CreateCourse extends ActionBarActivity {
 
-    private static final String TAG = "CreateCourse";
+    static SQLiteDatabase db = null;
+
+    private static final String TAG = "CreateCourseTest";
 
     private Course course = new Course();
 
