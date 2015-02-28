@@ -12,6 +12,8 @@ import android.widget.EditText;
 
 public class CreateCourse extends ActionBarActivity {
 
+    // stupid comment! Heavens!
+
     static SQLiteDatabase db = null;
 
     private static final String TAG = "CreateCourse";
