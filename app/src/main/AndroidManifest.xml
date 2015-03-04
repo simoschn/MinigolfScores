@@ -18,7 +18,10 @@
         </activity>
         <activity
             android:name=".CreateCourse"
-            android:label="@string/title_activity_create_course" >
+            android:label="@string/create_course">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.schneider_simon.minigolfscores.MainActivity" />
         </activity>
     </application>
 

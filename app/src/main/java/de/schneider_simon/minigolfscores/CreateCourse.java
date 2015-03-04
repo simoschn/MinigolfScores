@@ -1,5 +1,6 @@
 package de.schneider_simon.minigolfscores;
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 public class CreateCourse extends ActionBarActivity {
@@ -23,6 +26,10 @@ public class CreateCourse extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_course);
 
+        Button saveButton = (Button) findViewById(R.id.save_button);
+        saveButton.setOnClickListener(new MyOnClickListener());
+
+
         TextWatcher watcherClub = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -32,6 +39,7 @@ public class CreateCourse extends ActionBarActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+
                 course.setClub(s.toString());
 
                 LogCourse();
@@ -126,15 +134,11 @@ public class CreateCourse extends ActionBarActivity {
         editTextStreetNumber.addTextChangedListener(watcherStreetNumber);
         editTextZipCode.addTextChangedListener(watcherZipcode);
         editTextCity.addTextChangedListener(watcherCity);
-    }
 
-    private void LogCourse() {
-        Log.d(TAG, course.getClub());
-        Log.d(TAG, course.getSystem());
-        Log.d(TAG, course.getStreet());
-        Log.d(TAG, course.getStreetNumber());
-        Log.d(TAG, course.getZipcode());
-        Log.d(TAG, course.getCity());
+        CourseDBHelper dbHelper = new CourseDBHelper(getApplicationContext());
+
+        db = dbHelper.getWritableDatabase();
+
     }
 
     @Override
@@ -159,4 +163,32 @@ public class CreateCourse extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void LogCourse() {
+        Log.d(TAG, course.getClub());
+        Log.d(TAG, course.getSystem());
+        Log.d(TAG, course.getStreet());
+        Log.d(TAG, course.getStreetNumber());
+        Log.d(TAG, course.getZipcode());
+        Log.d(TAG, course.getCity());
+    }
+
+    private class MyOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+
+            ContentValues values = new ContentValues();
+
+            values.put("club", course.getClub());
+            values.put("system", course.getSystem());
+            values.put("street", course.getStreet());
+            values.put("street_number", course.getStreetNumber());
+            values.put("zipcode", course.getZipcode());
+            values.put("city", course.getCity());
+
+            db.insert("Courses", null, values);
+
+            Log.d(TAG, "db.insert executed.");
+
+        }
+    }
 }

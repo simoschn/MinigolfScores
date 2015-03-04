@@ -1,6 +1,9 @@
+package de.schneider_simon.minigolfscores;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by root on 28.02.15.
@@ -13,8 +16,8 @@ public class CourseDBHelper extends SQLiteOpenHelper {
             + "club" + " TEXT, "
             + "system" + " TEXT, "
             + "street" + " TEXT, "
-            + "streetNumber" + " TEXT, "
-            + "zipCode" + " TEXT, "
+            + "street_number" + " TEXT, "
+            + "zipcode" + " TEXT, "
             + "city" + " TEXT)";
 
     public CourseDBHelper(Context context){
@@ -23,7 +26,9 @@ public class CourseDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_CMD);
 
+        Log.d("CourseDBHelper", "execSQL executed");
     }
 
     @Override
