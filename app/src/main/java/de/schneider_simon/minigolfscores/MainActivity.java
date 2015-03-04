@@ -1,5 +1,6 @@
 package de.schneider_simon.minigolfscores;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,7 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CursorAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 
@@ -29,6 +33,8 @@ public class MainActivity extends ActionBarActivity {
         Button newCourseButton = (Button) findViewById(R.id.new_course_button);
         newCourseButton.setOnClickListener(new MyOnClickListener());
 
+        Spinner selectCourseSpinner = (Spinner) findViewById(R.id.select_course_spinner);
+
         TextView test = (TextView) findViewById(R.id.test_textView);
 
         CourseDBHelper dbHelper = new CourseDBHelper(getApplicationContext());
@@ -38,9 +44,9 @@ public class MainActivity extends ActionBarActivity {
         Cursor cursor = db.query("Courses", new String[] {"club"}, null, null, null, null, null);
 
         cursor.moveToFirst();
-        cursor.moveToNext();
 
-        test.setText(cursor.getString(0));
+        CursorAdapter cursorAdapter = new CursorAdapter(this, cursor, 0);
+
 
 
     }
