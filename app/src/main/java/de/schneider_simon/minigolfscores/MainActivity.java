@@ -5,19 +5,25 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "MainActivity";
 
     static Cursor cursorForClubSpinner;
+    static Cursor cursorForClubDisplay;
+
+    Spinner selectClubSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,17 +31,66 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button newCourseButton = (Button) findViewById(R.id.new_course_button);
-        newCourseButton.setOnClickListener(new MyOnClickListener());
+        initNewCourseButton();
 
+        initSelectClubSpinner();
+
+        //displaySelectedCourseDetails();
+    }
+
+    private void initSelectClubSpinner() {
         fillSpinnerFromCourseDb();
+
+        selectClubSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                Log.d(TAG, "Item selected");
+
+                displaySelectedCourseDetails();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void initNewCourseButton() {
+        Button newCourseButton = (Button) findViewById(R.id.new_course_button);
+        newCourseButton.setOnClickListener(new MyNewCourseOnClickListener());
+    }
+
+    private void displaySelectedCourseDetails() {
+        TextView viewSystem = (TextView) findViewById(R.id.text_view_system);
+        TextView viewStreet = (TextView) findViewById(R.id.text_view_street);
+        TextView viewStreetNumber = (TextView) findViewById(R.id.text_view_street_number);
+        TextView viewZipcode = (TextView) findViewById(R.id.text_view_zipcode);
+        TextView viewCity = (TextView) findViewById(R.id.text_view_city);
+
+        initCursorForClubDisplay();
+
+       TextView selectedView = (TextView) selectClubSpinner.getSelectedView();
+       String selectedClub = selectedView.getText().toString();
+
+        while(!(cursorForClubDisplay.getString(0)).equals(selectedClub))
+            cursorForClubDisplay.moveToNext();
+
+        viewSystem.setText(cursorForClubDisplay.getString(1));
+        viewStreet.setText(cursorForClubDisplay.getString(2));
+        viewStreetNumber.setText(cursorForClubDisplay.getString(3));
+        viewZipcode.setText(cursorForClubDisplay.getString(4));
+        viewCity.setText(cursorForClubDisplay.getString(5));
+
+        cursorForClubDisplay.close();
     }
 
     @Override
     protected void onDestroy() {
 
         cursorForClubSpinner.close();
-        
+
         super.onDestroy();
     }
 
@@ -62,7 +117,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void fillSpinnerFromCourseDb() {
-        Spinner selectCourseSpinner = (Spinner) findViewById(R.id.select_course_spinner);
+
+        selectClubSpinner = (Spinner) findViewById(R.id.select_course_spinner);
 
         String[] clubColumn = new String[] {"club"};
 
@@ -79,7 +135,10 @@ public class MainActivity extends ActionBarActivity {
 
         clubAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        selectCourseSpinner.setAdapter(clubAdapter);
+        selectClubSpinner.setAdapter(clubAdapter);
+
+        selectClubSpinner.setSelection(0);
+
     }
 
     private void initCursorForClubSpinner() {
@@ -97,7 +156,22 @@ public class MainActivity extends ActionBarActivity {
         courseDb.close();
     }
 
-    class MyOnClickListener implements OnClickListener {
+    private void initCursorForClubDisplay() {
+
+        SQLiteDatabase courseDb;
+
+        CourseDBHelper courseDbHelper = new CourseDBHelper(getApplicationContext());
+
+        courseDb = courseDbHelper.getReadableDatabase();
+
+        cursorForClubDisplay = courseDb.query("Courses", new String[] {"club", "system", "street", "street_number", "zipcode", "city"}, null, null, null, null, null);
+
+        cursorForClubDisplay.moveToFirst();
+
+        courseDb.close();
+    }
+
+    class MyNewCourseOnClickListener implements OnClickListener {
 
         public void onClick(View view) {
 
@@ -106,4 +180,5 @@ public class MainActivity extends ActionBarActivity {
         }
 
     }
+
 }

@@ -3,11 +3,6 @@ package de.schneider_simon.minigolfscores;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-/**
- * Created by root on 28.02.15.
- */
 
 public class CourseDBHelper extends SQLiteOpenHelper {
 

@@ -1,9 +1,5 @@
 package de.schneider_simon.minigolfscores;
 
-/**
- * Created by root on 28.02.15.
- */
-
 public class Course {
 
     private static final String NOT_SET = "-";
