@@ -14,21 +14,21 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Testfeld"
-        android:id="@+id/test_textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/select_course_spinner"
-        android:layout_above="@+id/new_course_button"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="99dp"
-        android:longClickable="true" />
+        android:longClickable="false"
+        android:spinnerMode="dropdown" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textForSpinner"
+        android:layout_below="@+id/select_course_spinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible" />
 </RelativeLayout>

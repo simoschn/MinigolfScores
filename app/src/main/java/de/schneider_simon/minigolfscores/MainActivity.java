@@ -1,28 +1,25 @@
 package de.schneider_simon.minigolfscores;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CursorAdapter;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
-
 
 public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "Main";
 
     static SQLiteDatabase db = null;
+
+    Cursor cursorForClubSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,20 +32,39 @@ public class MainActivity extends ActionBarActivity {
 
         Spinner selectCourseSpinner = (Spinner) findViewById(R.id.select_course_spinner);
 
-        TextView test = (TextView) findViewById(R.id.test_textView);
-
         CourseDBHelper dbHelper = new CourseDBHelper(getApplicationContext());
 
         db = dbHelper.getReadableDatabase();
 
-        Cursor cursor = db.query("Courses", new String[] {"club"}, null, null, null, null, null);
+        cursorForClubSpinner = db.query("Courses", new String[] {"_id", "club"}, null, null, null, null, null);
 
-        cursor.moveToFirst();
+        cursorForClubSpinner.moveToFirst();
 
-        CursorAdapter cursorAdapter = new CursorAdapter(this, cursor, 0);
+        String[] clubColumn = new String[] {"club"};
 
+        int[] toSpinner = new int[] {android.R.id.text1};
 
+        SimpleCursorAdapter clubAdapter = new SimpleCursorAdapter(this,
+                                                                    android.R.layout.simple_spinner_item,
+                                                                    cursorForClubSpinner,
+                                                                    clubColumn,
+                                                                    toSpinner,
+                                                                    0);
 
+        clubAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        selectCourseSpinner.setAdapter(clubAdapter);
+
+        db.close();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        cursorForClubSpinner.close();
+        
+        super.onDestroy();
     }
 
     @Override
