@@ -29,116 +29,156 @@ public class CreateCourse extends ActionBarActivity {
         Button saveButton = (Button) findViewById(R.id.save_button);
         saveButton.setOnClickListener(new MyOnClickListener());
 
-
-        TextWatcher watcherClub = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                course.setClub(s.toString());
-
-                LogCourse();
-            }
-        };
-
-        TextWatcher watcherSystem = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                course.setSystem(s.toString());
-
-                LogCourse();
-            }
-        };
-
-        TextWatcher watcherStreet = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                course.setStreet(s.toString());
-
-                LogCourse();
-            }
-        };
-
-        TextWatcher watcherStreetNumber = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                course.setStreetNumber(s.toString());
-
-                LogCourse();
-            }
-        };
-
-        TextWatcher watcherZipcode = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                course.setZipcode(s.toString());
-
-                LogCourse();
-            }
-        };
-
-        TextWatcher watcherCity = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                course.setCity(s.toString());
-
-                LogCourse();
-            }
-        };
-
-        EditText editTextClub = (EditText) findViewById(R.id.editText_club);
-        EditText editTextSystem = (EditText) findViewById(R.id.editText_system);
-        EditText editTextStreet = (EditText) findViewById(R.id.editText_street);
-        EditText editTextStreetNumber = (EditText) findViewById(R.id.editText_streetNumber);
-        EditText editTextZipCode = (EditText) findViewById(R.id.editText_zipcode);
-        EditText editTextCity = (EditText) findViewById(R.id.editText_city);
-
-        editTextClub.addTextChangedListener(watcherClub);
-        editTextSystem.addTextChangedListener(watcherSystem);
-        editTextStreet.addTextChangedListener(watcherStreet);
-        editTextStreetNumber.addTextChangedListener(watcherStreetNumber);
-        editTextZipCode.addTextChangedListener(watcherZipcode);
-        editTextCity.addTextChangedListener(watcherCity);
+        initEditTextClub();
+        initEditTextSystem();
+        initEditTextStreet();
+        initEditTextStreetNumber();
+        initEditTextZipcode();
+        initEditTextCity();
 
         CourseDBHelper dbHelper = new CourseDBHelper(getApplicationContext());
 
         db = dbHelper.getWritableDatabase();
 
+    }
+
+    private void initEditTextCity() {
+        EditText editTextCity = (EditText) findViewById(R.id.editText_city);
+        TextWatcher watcherCity = getTextWatcherCity();
+        editTextCity.addTextChangedListener(watcherCity);
+    }
+
+    private TextWatcher getTextWatcherCity() {
+        return new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    course.setCity(s.toString());
+
+                    LogCourse();
+                }
+            };
+    }
+
+    private void initEditTextZipcode() {
+        EditText editTextZipCode = (EditText) findViewById(R.id.editText_zipcode);
+        TextWatcher watcherZipcode = getTextWatcherZipcode();
+        editTextZipCode.addTextChangedListener(watcherZipcode);
+    }
+
+    private TextWatcher getTextWatcherZipcode() {
+        return new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    course.setZipcode(s.toString());
+
+                    LogCourse();
+                }
+            };
+    }
+
+    private void initEditTextStreetNumber() {
+        EditText editTextStreetNumber = (EditText) findViewById(R.id.editText_streetNumber);
+        TextWatcher watcherStreetNumber = getTextWatcherStreetNumber();
+        editTextStreetNumber.addTextChangedListener(watcherStreetNumber);
+    }
+
+    private TextWatcher getTextWatcherStreetNumber() {
+        return new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    course.setStreetNumber(s.toString());
+
+                    LogCourse();
+                }
+            };
+    }
+
+    private void initEditTextStreet() {
+        EditText editTextStreet = (EditText) findViewById(R.id.editText_street);
+        TextWatcher watcherStreet = getTextWatcherStreet();
+        editTextStreet.addTextChangedListener(watcherStreet);
+    }
+
+    private TextWatcher getTextWatcherStreet() {
+        return new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    course.setStreet(s.toString());
+
+                    LogCourse();
+                }
+            };
+    }
+
+    private void initEditTextSystem() {
+        EditText editTextSystem = (EditText) findViewById(R.id.editText_system);
+        TextWatcher watcherSystem = getTextWatcherSystem();
+        editTextSystem.addTextChangedListener(watcherSystem);
+    }
+
+    private TextWatcher getTextWatcherSystem() {
+        return new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    course.setSystem(s.toString());
+
+                    LogCourse();
+                }
+            };
+    }
+
+    private void initEditTextClub() {
+        EditText editTextClub = (EditText) findViewById(R.id.editText_club);
+        TextWatcher watcherClub = getTextWatcherClub();
+        editTextClub.addTextChangedListener(watcherClub);
+    }
+
+    private TextWatcher getTextWatcherClub() {
+        return new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                    course.setClub(s.toString());
+
+                    LogCourse();
+                }
+            };
     }
 
     @Override
@@ -186,8 +226,6 @@ public class CreateCourse extends ActionBarActivity {
             values.put("city", course.getCity());
 
             db.insert("Courses", null, values);
-
-            Log.d(TAG, "db.insert executed.");
 
         }
     }

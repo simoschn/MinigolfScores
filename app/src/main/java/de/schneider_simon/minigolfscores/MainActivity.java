@@ -15,11 +15,9 @@ import android.widget.Spinner;
 
 public class MainActivity extends ActionBarActivity {
 
-    private static final String TAG = "Main";
+    private static final String TAG = "MainActivity";
 
-    static SQLiteDatabase db = null;
-
-    Cursor cursorForClubSpinner;
+    static Cursor cursorForClubSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,33 +28,7 @@ public class MainActivity extends ActionBarActivity {
         Button newCourseButton = (Button) findViewById(R.id.new_course_button);
         newCourseButton.setOnClickListener(new MyOnClickListener());
 
-        Spinner selectCourseSpinner = (Spinner) findViewById(R.id.select_course_spinner);
-
-        CourseDBHelper dbHelper = new CourseDBHelper(getApplicationContext());
-
-        db = dbHelper.getReadableDatabase();
-
-        cursorForClubSpinner = db.query("Courses", new String[] {"_id", "club"}, null, null, null, null, null);
-
-        cursorForClubSpinner.moveToFirst();
-
-        String[] clubColumn = new String[] {"club"};
-
-        int[] toSpinner = new int[] {android.R.id.text1};
-
-        SimpleCursorAdapter clubAdapter = new SimpleCursorAdapter(this,
-                                                                    android.R.layout.simple_spinner_item,
-                                                                    cursorForClubSpinner,
-                                                                    clubColumn,
-                                                                    toSpinner,
-                                                                    0);
-
-        clubAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        selectCourseSpinner.setAdapter(clubAdapter);
-
-        db.close();
-
+        fillSpinnerFromCourseDb();
     }
 
     @Override
@@ -87,6 +59,42 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void fillSpinnerFromCourseDb() {
+        Spinner selectCourseSpinner = (Spinner) findViewById(R.id.select_course_spinner);
+
+        String[] clubColumn = new String[] {"club"};
+
+        int[] toSpinner = new int[] {android.R.id.text1};
+
+        initCursorForClubSpinner();
+
+        SimpleCursorAdapter clubAdapter = new SimpleCursorAdapter(this,
+                android.R.layout.simple_spinner_item,
+                cursorForClubSpinner,
+                clubColumn,
+                toSpinner,
+                0);
+
+        clubAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        selectCourseSpinner.setAdapter(clubAdapter);
+    }
+
+    private void initCursorForClubSpinner() {
+
+        SQLiteDatabase courseDb;
+
+        CourseDBHelper courseDbHelper = new CourseDBHelper(getApplicationContext());
+
+        courseDb = courseDbHelper.getReadableDatabase();
+
+        cursorForClubSpinner = courseDb.query("Courses", new String[] {"_id", "club"}, null, null, null, null, null);
+
+        cursorForClubSpinner.moveToFirst();
+
+        courseDb.close();
     }
 
     class MyOnClickListener implements OnClickListener {

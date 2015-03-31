@@ -27,8 +27,6 @@ public class CourseDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_CMD);
-
-        Log.d("CourseDBHelper", "execSQL executed");
     }
 
     @Override
