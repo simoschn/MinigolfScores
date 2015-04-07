@@ -25,6 +25,8 @@ public class MainActivity extends ActionBarActivity {
 
     Spinner selectClubSpinner;
 
+    String selectedClub = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -82,7 +84,7 @@ public class MainActivity extends ActionBarActivity {
         if(selectedView == null)
            return;
 
-        String selectedClub = selectedView.getText().toString();
+        selectedClub = selectedView.getText().toString();
 
         moveCursorToSelectedClub(selectedClub);
 
@@ -200,6 +202,7 @@ public class MainActivity extends ActionBarActivity {
         public void onClick(View view) {
 
             Intent playRound = new Intent(MainActivity.this, PlayRound.class);
+            playRound.putExtra("club", selectedClub);
             startActivity(playRound);
         }
     }
