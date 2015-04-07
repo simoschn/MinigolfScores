@@ -32,6 +32,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         initNewCourseButton();
+        initPlayRoundButton();
 
         initSelectClubSpinner();
 
@@ -62,6 +63,11 @@ public class MainActivity extends ActionBarActivity {
         newCourseButton.setOnClickListener(new MyNewCourseOnClickListener());
     }
 
+    private void initPlayRoundButton() {
+        Button playRoundButton = (Button) findViewById(R.id.play_round_button);
+        playRoundButton.setOnClickListener(new MyPlayRoundOnClickListener());
+    }
+
     private void displaySelectedCourseDetails() {
         TextView viewSystem = (TextView) findViewById(R.id.text_view_system);
         TextView viewStreet = (TextView) findViewById(R.id.text_view_street);
@@ -71,11 +77,14 @@ public class MainActivity extends ActionBarActivity {
 
         initCursorForClubDisplay();
 
-       TextView selectedView = (TextView) selectClubSpinner.getSelectedView();
-       String selectedClub = selectedView.getText().toString();
+        TextView selectedView = (TextView) selectClubSpinner.getSelectedView();
 
-        while(!(cursorForClubDisplay.getString(0)).equals(selectedClub))
-            cursorForClubDisplay.moveToNext();
+        if(selectedView == null)
+           return;
+
+        String selectedClub = selectedView.getText().toString();
+
+        moveCursorToSelectedClub(selectedClub);
 
         viewSystem.setText(cursorForClubDisplay.getString(1));
         viewStreet.setText(cursorForClubDisplay.getString(2));
@@ -84,6 +93,11 @@ public class MainActivity extends ActionBarActivity {
         viewCity.setText(cursorForClubDisplay.getString(5));
 
         cursorForClubDisplay.close();
+    }
+
+    private void moveCursorToSelectedClub(String selectedClub) {
+        while(!(cursorForClubDisplay.getString(0)).equals(selectedClub))
+            cursorForClubDisplay.moveToNext();
     }
 
     @Override
@@ -181,4 +195,12 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    class MyPlayRoundOnClickListener implements OnClickListener {
+
+        public void onClick(View view) {
+
+            Intent playRound = new Intent(MainActivity.this, PlayRound.class);
+            startActivity(playRound);
+        }
+    }
 }

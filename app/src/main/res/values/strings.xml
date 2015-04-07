@@ -7,6 +7,7 @@
     <string name="create_course">Neuen Platz anlegen...</string>
     <string name="show_course_details">Platz anzeigen...</string>
     <string name="title_activity_create_course">Neuen Platz anlegen</string>
+    <string name="play_round">Runde spielen!</string>
 
     <string name="club_hint">Verein</string>
     <string name="system_hint">System</string>
@@ -18,5 +19,6 @@
     <string name="not_set">-</string>
     <string name="save_button">Speichern</string>
     <string name="title_activity_show_course_details">Platz anzeigen</string>
+    <string name="title_activity_play_round">PlayRound</string>
 
 </resources>

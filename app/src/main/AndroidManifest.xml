@@ -23,6 +23,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.schneider_simon.minigolfscores.MainActivity" />
         </activity>
+        <activity
+            android:name=".PlayRound"
+            android:label="@string/title_activity_play_round"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.schneider_simon.minigolfscores.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

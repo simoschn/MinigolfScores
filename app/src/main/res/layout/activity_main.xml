@@ -8,30 +8,39 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/play_round"
+        android:id="@+id/play_round_button"
+        android:layout_gravity="center_horizontal"
+        android:layout_above="@+id/new_course_button"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/create_course"
         android:id="@+id/new_course_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/select_course_spinner"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="99dp"
-        android:longClickable="false"
-        android:spinnerMode="dropdown" />
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="false"
-        android:layout_marginTop="76dp"
-        android:layout_above="@+id/new_course_button">
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/play_round_button">
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/select_course_spinner"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="99dp"
+            android:longClickable="false"
+            android:spinnerMode="dropdown" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -67,6 +76,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/city_hint"
             android:id="@+id/text_view_city" />
+
     </LinearLayout>
 
 </RelativeLayout>
