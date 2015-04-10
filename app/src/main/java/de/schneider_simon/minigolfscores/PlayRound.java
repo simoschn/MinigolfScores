@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -23,7 +24,7 @@ public class PlayRound extends ActionBarActivity {
 
     private static final Integer TITLE_HEIGHT = 330;
     private static final Integer SIDE_MARGIN = 80;
-    private static final Integer MARGIN = 2;
+    private static final Integer MARGIN = 0;
     private static final Integer RESERVED_COLUMNS = 2;
 
     static SQLiteDatabase db = null;
@@ -34,6 +35,7 @@ public class PlayRound extends ActionBarActivity {
     TextView[][] playedRounds;
 
     String selectedClub;
+    private Bundle savedInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,24 +43,45 @@ public class PlayRound extends ActionBarActivity {
         setContentView(R.layout.activity_play_round);
 
         selectedClub = getIntent().getStringExtra("club");
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+
+        super.onWindowFocusChanged(hasFocus);
+
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.play_round_relative_layout);
+        Integer relativeLayoutWidth = relativeLayout.getWidth();
+        Integer relativeLayoutHeight = relativeLayout.getHeight();
+        Log.d(TAG, "relativeLayoutWidth onWindowFocusChanged: " + relativeLayoutWidth.toString());
+        Log.d(TAG, "relativeLayoutHeight onWindowFocusChanged: " + relativeLayoutHeight.toString());
 
         gridLayout = (GridLayout) findViewById(R.id.play_round_grid);
         Integer numberOfColumns = gridLayout.getColumnCount();
         Integer numberOfRows = gridLayout.getRowCount();
 
+        Integer gridWidth = gridLayout.getWidth();
+        Integer gridHeight = gridLayout.getHeight();
+
+        Log.d(TAG, "gridWidth: " + gridWidth.toString());
+        Log.d(TAG, "gridHeight: " + gridHeight.toString());
+
         holeNames = new TextView[numberOfRows];
         holeScores = new Button[numberOfRows];
         playedRounds = new TextView[numberOfColumns - RESERVED_COLUMNS][numberOfRows];
 
+        /*
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         int screenWidth = size.x - SIDE_MARGIN;
         int screenHeight = size.y - TITLE_HEIGHT;
+        */
+
         int column = 0;
 
-        Integer elementWidth = screenWidth/numberOfColumns;
-        Integer elementHeight = screenHeight/numberOfRows;
+        Integer elementWidth = gridWidth/numberOfColumns;
+        Integer elementHeight = gridHeight/numberOfRows;
 
         Log.d(TAG, "numberOfColumns: " + numberOfColumns.toString());
         Log.d(TAG, "numberOfRows: " + numberOfRows.toString());
@@ -148,7 +171,18 @@ public class PlayRound extends ActionBarActivity {
         RoundsDBHelper dbHelper = new RoundsDBHelper(getApplicationContext());
 
         db = dbHelper.getWritableDatabase();
+
     }
+
+/*    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+
+        this.savedInstanceState = savedInstanceState;
+        super.onPostCreate(savedInstanceState);
+
+
+    }
+*/
 
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
