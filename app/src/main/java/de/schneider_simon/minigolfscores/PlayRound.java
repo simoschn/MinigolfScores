@@ -3,11 +3,9 @@ package de.schneider_simon.minigolfscores;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,9 +20,7 @@ public class PlayRound extends ActionBarActivity {
 
     private static final String TAG = "PlayRound";
 
-    private static final Integer TITLE_HEIGHT = 330;
-    private static final Integer SIDE_MARGIN = 80;
-    private static final Integer MARGIN = 0;
+    private static final Integer ROW_MARGIN = 5;
     private static final Integer RESERVED_COLUMNS = 2;
 
     static SQLiteDatabase db = null;
@@ -35,7 +31,6 @@ public class PlayRound extends ActionBarActivity {
     TextView[][] playedRounds;
 
     String selectedClub;
-    private Bundle savedInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +38,18 @@ public class PlayRound extends ActionBarActivity {
         setContentView(R.layout.activity_play_round);
 
         selectedClub = getIntent().getStringExtra("club");
+
+        RoundsDBHelper dbHelper = new RoundsDBHelper(getApplicationContext());
+
+        db = dbHelper.getWritableDatabase();
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
 
         super.onWindowFocusChanged(hasFocus);
+
+        setTitle(selectedClub);
 
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.play_round_relative_layout);
         Integer relativeLayoutWidth = relativeLayout.getWidth();
@@ -61,7 +62,7 @@ public class PlayRound extends ActionBarActivity {
         Integer numberOfRows = gridLayout.getRowCount();
 
         Integer gridWidth = gridLayout.getWidth();
-        Integer gridHeight = gridLayout.getHeight();
+        Integer gridHeight = ((gridLayout.getHeight()) - (numberOfRows*ROW_MARGIN));
 
         Log.d(TAG, "gridWidth: " + gridWidth.toString());
         Log.d(TAG, "gridHeight: " + gridHeight.toString());
@@ -101,7 +102,7 @@ public class PlayRound extends ActionBarActivity {
             GridLayout.LayoutParams params = new GridLayout.LayoutParams(row, col);
             params.width = elementWidth;
             params.height = elementHeight;
-            params.setMargins(MARGIN,0,MARGIN,0);
+            params.setMargins(0,0,0,0);
             holeNames[yPos].setLayoutParams(params);
 
             gridLayout.addView(holeNames[yPos]);
@@ -138,7 +139,7 @@ public class PlayRound extends ActionBarActivity {
             GridLayout.LayoutParams params = new GridLayout.LayoutParams(row, col);
             params.width = elementWidth;
             params.height = elementHeight;
-            params.setMargins(MARGIN,0,MARGIN,0);
+            params.setMargins(0,0,0,0);
             holeScores[yPos].setLayoutParams(params);
 
             gridLayout.addView(holeScores[yPos]);
@@ -160,17 +161,13 @@ public class PlayRound extends ActionBarActivity {
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams(row, col);
                 params.width = elementWidth;
                 params.height = elementHeight;
-                params.setMargins(MARGIN,0,MARGIN,0);
+                params.setMargins(0,0,0,0);
 
                 playedRounds[xPos][yPos].setLayoutParams(params);
 
                 gridLayout.addView(playedRounds[xPos][yPos]);
             }
         }
-
-        RoundsDBHelper dbHelper = new RoundsDBHelper(getApplicationContext());
-
-        db = dbHelper.getWritableDatabase();
 
     }
 
