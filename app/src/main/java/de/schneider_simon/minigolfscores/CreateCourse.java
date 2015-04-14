@@ -1,6 +1,7 @@
 package de.schneider_simon.minigolfscores;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -225,7 +226,12 @@ public class CreateCourse extends ActionBarActivity {
             values.put("zipcode", course.getZipcode());
             values.put("city", course.getCity());
 
-            db.insert("Courses", null, values);
+            Cursor clubCounter = db.query("Courses", new String[]{"club"}, "club='" + course.getClub() + "'", null, null, null, null, null);
+
+            if(clubCounter.getCount() == 0)
+                db.insert("Courses", null, values);
+            else
+                db.update("Courses", values, "club='"+course.getClub()+"'", null);
 
         }
     }
