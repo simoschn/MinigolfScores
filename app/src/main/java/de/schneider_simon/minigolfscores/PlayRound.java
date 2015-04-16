@@ -31,8 +31,6 @@ public class PlayRound extends ActionBarActivity {
 
     private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
-    private static boolean layoutDone = false;
-
     static SQLiteDatabase roundsDb = null;
 
     GridLayout gridLayout;
@@ -64,58 +62,52 @@ public class PlayRound extends ActionBarActivity {
         numberOfColumns = gridLayout.getColumnCount();
         numberOfRows = gridLayout.getRowCount();
 
-        if(savedInstanceState==null) {
-            holeNames = new TextView[numberOfRows];
-            holeScores = new Button[numberOfRows];
-            playedRounds = new TextView[numberOfColumns - RESERVED_COLUMNS][numberOfRows];
+        holeNames = new TextView[numberOfRows];
+        holeScores = new Button[numberOfRows];
+        playedRounds = new TextView[numberOfColumns - RESERVED_COLUMNS][numberOfRows];
 
-            for (Integer yPos = 0; yPos < numberOfRows; yPos++) {
-                holeNames[yPos] = new TextView(this);
-                holeNames[yPos].setId(generateViewId());
-                Integer holeNumber = yPos + 1;
+        for (Integer yPos = 0; yPos < numberOfRows; yPos++) {
+            holeNames[yPos] = new TextView(this);
+            Integer holeNumber = yPos + 1;
 
-                if (yPos < NUMBER_OF_HOLES)
-                    holeNames[yPos].setText("Bahn " + (holeNumber.toString()));
+            if (yPos < NUMBER_OF_HOLES)
+                holeNames[yPos].setText("Bahn " + (holeNumber.toString()));
+        }
+
+        for (Integer yPos = 0; yPos < numberOfRows; yPos++) {
+            holeScores[yPos] = new Button(this, null, android.R.attr.buttonStyleSmall);
+            holeScores[yPos].setTextSize(16);
+            holeScores[yPos].setPadding(0, 0, 0, 0);
+
+            if (yPos < NUMBER_OF_HOLES) {
+                holeScores[yPos].setText("1");
+                holeScores[yPos].setBackgroundColor(Color.argb(255, 255, 255, 0));
+                holeScores[yPos].setOnClickListener(new MyHoleScoreOnClickListener(yPos));
             }
 
-            for (Integer yPos = 0; yPos < numberOfRows; yPos++) {
-                holeScores[yPos] = new Button(this, null, android.R.attr.buttonStyleSmall);
-                holeScores[yPos].setId(generateViewId());
-                holeScores[yPos].setTextSize(16);
-                holeScores[yPos].setPadding(0, 0, 0, 0);
-
-                if (yPos < NUMBER_OF_HOLES) {
-                    holeScores[yPos].setText("1");
-                    holeScores[yPos].setBackgroundColor(Color.argb(255, 255, 255, 0));
-                    holeScores[yPos].setOnClickListener(new MyHoleScoreOnClickListener(yPos));
-                }
-
-                if (yPos == INDEX_TOTAL_SCORE) {
-                    holeScores[yPos].setText("18");
-                    holeScores[yPos].setBackgroundColor(Color.argb(255, 255, 255, 0));
-                }
-
-                if (yPos == INDEX_SAVE_BUTTON) {
-                    holeScores[yPos].setText("\u2714");
-                    holeScores[yPos].setTextColor(Color.argb(255, 0, 255, 0));
-                    holeScores[yPos].setBackgroundColor(Color.argb(255, 0, 0, 0));
-                    holeScores[yPos].setOnClickListener(new MySaveRoundOnClickListener());
-                }
+            if (yPos == INDEX_TOTAL_SCORE) {
+                holeScores[yPos].setText("18");
+                holeScores[yPos].setBackgroundColor(Color.argb(255, 255, 255, 0));
             }
 
-            for (Integer xPos = 0; xPos < numberOfColumns - RESERVED_COLUMNS; xPos++) {
-                for (Integer yPos = 0; yPos < numberOfRows; yPos++) {
-
-                    playedRounds[xPos][yPos] = new TextView(this);
-                    playedRounds[xPos][yPos].setId(generateViewId());
-
-                    playedRounds[xPos][yPos].setGravity(Gravity.CENTER);
-                    playedRounds[xPos][yPos].setText("0");
-                    playedRounds[xPos][yPos].setBackgroundColor(Color.argb(255, 255, 255, 255));
-                }
+            if (yPos == INDEX_SAVE_BUTTON) {
+                holeScores[yPos].setText("\u2714");
+                holeScores[yPos].setTextColor(Color.argb(255, 0, 255, 0));
+                holeScores[yPos].setBackgroundColor(Color.argb(255, 0, 0, 0));
+                holeScores[yPos].setOnClickListener(new MySaveRoundOnClickListener());
             }
         }
 
+        for (Integer xPos = 0; xPos < numberOfColumns - RESERVED_COLUMNS; xPos++) {
+            for (Integer yPos = 0; yPos < numberOfRows; yPos++) {
+
+                playedRounds[xPos][yPos] = new TextView(this);
+
+                playedRounds[xPos][yPos].setGravity(Gravity.CENTER);
+                playedRounds[xPos][yPos].setText("0");
+                playedRounds[xPos][yPos].setBackgroundColor(Color.argb(255, 255, 255, 255));
+            }
+        }
     }
 
     @Override
@@ -123,68 +115,63 @@ public class PlayRound extends ActionBarActivity {
 
         super.onWindowFocusChanged(hasFocus);
 
-        if(!layoutDone) {
+        setTitle(selectedClub);
 
-            setTitle(selectedClub);
+        gridWidth = gridLayout.getWidth();
+        gridHeight = ((gridLayout.getHeight()) - (numberOfRows * ROW_MARGIN));
 
-            gridWidth = gridLayout.getWidth();
-            gridHeight = ((gridLayout.getHeight()) - (numberOfRows * ROW_MARGIN));
+        elementWidth = gridWidth / numberOfColumns;
+        elementHeight = gridHeight / numberOfRows;
 
-            elementWidth = gridWidth / numberOfColumns;
-            elementHeight = gridHeight / numberOfRows;
+        int column = 0;
 
-            int column = 0;
+        for (Integer yPos = 0; yPos < numberOfRows; yPos++) {
 
+            GridLayout.Spec col = GridLayout.spec(column, NUMBER_OF_HOLE_NAMES_COLUMNS);
+            GridLayout.Spec row = GridLayout.spec(yPos);
+
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams(row, col);
+            params.width = elementWidth * NUMBER_OF_HOLE_NAMES_COLUMNS;
+            params.height = elementHeight;
+            params.setMargins(0, 0, 0, 0);
+            holeNames[yPos].setLayoutParams(params);
+
+            gridLayout.addView(holeNames[yPos]);
+        }
+
+        column+= NUMBER_OF_HOLE_NAMES_COLUMNS;
+
+        for (Integer yPos = 0; yPos < numberOfRows; yPos++) {
+
+            GridLayout.Spec col = GridLayout.spec(column);
+            GridLayout.Spec row = GridLayout.spec(yPos);
+
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams(row, col);
+            params.width = elementWidth;
+            params.height = elementHeight;
+            params.setMargins(0, 0, 0, 0);
+            holeScores[yPos].setLayoutParams(params);
+
+            gridLayout.addView(holeScores[yPos]);
+        }
+
+        column++;
+
+        for (Integer xPos = 0; xPos < numberOfColumns - RESERVED_COLUMNS; xPos++) {
             for (Integer yPos = 0; yPos < numberOfRows; yPos++) {
 
-                GridLayout.Spec col = GridLayout.spec(column, NUMBER_OF_HOLE_NAMES_COLUMNS);
-                GridLayout.Spec row = GridLayout.spec(yPos);
-
-                GridLayout.LayoutParams params = new GridLayout.LayoutParams(row, col);
-                params.width = elementWidth * NUMBER_OF_HOLE_NAMES_COLUMNS;
-                params.height = elementHeight;
-                params.setMargins(0, 0, 0, 0);
-                holeNames[yPos].setLayoutParams(params);
-
-                gridLayout.addView(holeNames[yPos]);
-            }
-
-            column+= NUMBER_OF_HOLE_NAMES_COLUMNS;
-
-            for (Integer yPos = 0; yPos < numberOfRows; yPos++) {
-
-                GridLayout.Spec col = GridLayout.spec(column);
+                GridLayout.Spec col = GridLayout.spec(xPos + column);
                 GridLayout.Spec row = GridLayout.spec(yPos);
 
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams(row, col);
                 params.width = elementWidth;
                 params.height = elementHeight;
                 params.setMargins(0, 0, 0, 0);
-                holeScores[yPos].setLayoutParams(params);
 
-                gridLayout.addView(holeScores[yPos]);
+                playedRounds[xPos][yPos].setLayoutParams(params);
+
+                gridLayout.addView(playedRounds[xPos][yPos]);
             }
-
-            column++;
-
-            for (Integer xPos = 0; xPos < numberOfColumns - RESERVED_COLUMNS; xPos++) {
-                for (Integer yPos = 0; yPos < numberOfRows; yPos++) {
-
-                    GridLayout.Spec col = GridLayout.spec(xPos + column);
-                    GridLayout.Spec row = GridLayout.spec(yPos);
-
-                    GridLayout.LayoutParams params = new GridLayout.LayoutParams(row, col);
-                    params.width = elementWidth;
-                    params.height = elementHeight;
-                    params.setMargins(0, 0, 0, 0);
-
-                    playedRounds[xPos][yPos].setLayoutParams(params);
-
-                    gridLayout.addView(playedRounds[xPos][yPos]);
-                }
-            }
-
-            layoutDone = true;
         }
     }
 
@@ -303,17 +290,4 @@ public class PlayRound extends ActionBarActivity {
 
         }
     }
-
-    private static int generateViewId() {
-        for (;;) {
-            final int result = sNextGeneratedId.get();
-            // aapt-generated IDs have the high byte nonzero; clamp to the range under that.
-            int newValue = result + 1;
-            if (newValue > 0x00FFFFFF) newValue = 1; // Roll over to 1, not 0.
-            if (sNextGeneratedId.compareAndSet(result, newValue)) {
-                return result;
-            }
-        }
-    }
-
 }
