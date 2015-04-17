@@ -1,9 +1,10 @@
 package de.schneider_simon.minigolfscores;
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
@@ -20,26 +21,22 @@ public class PlayRoundViews {
     private static final Integer NUMBER_OF_HOLE_NAMES_COLUMNS = 2;
     private static final Integer RESERVED_COLUMNS = 1 + NUMBER_OF_HOLE_NAMES_COLUMNS;
 
-    GridLayout gridLayout;
-    TextView[] holeNames;
-    Button[] holeScores;
-    TextView[][] playedRounds;
+    private static GridLayout gridLayout;
+    private static TextView[] holeNames;
+    private static Button[] holeScores;
+    private static TextView[][] playedRounds;
 
     static SQLiteDatabase roundsDb = null;
 
-    Integer numberOfColumns;
-    Integer numberOfRows;
-    Integer gridWidth;
-    Integer gridHeight;
-    Integer elementWidth;
-    Integer elementHeight;
+    private static Integer numberOfColumns;
+    private static Integer numberOfRows;
 
-    String selectedClub;
+    private static String selectedClub;
 
-    PlayRoundViews(GridLayout gridlayout, String selectedClub, Context context) {
+    PlayRoundViews(GridLayout grid, String club, Context context) {
 
-        this.gridLayout = gridlayout;
-        this.selectedClub = selectedClub;
+        gridLayout = grid;
+        selectedClub = club;
 
         RoundsDBHelper dbHelper = new RoundsDBHelper(context.getApplicationContext());
 
@@ -58,12 +55,16 @@ public class PlayRoundViews {
 
         for (Integer yPos = 0; yPos < numberOfRows; yPos++) {
             holeScores[yPos] = new Button(context, null, android.R.attr.buttonStyleSmall);
+            holeScores[yPos].setBackgroundColor(Color.argb(255, 255, 255, 0));
 
             if(yPos <= NUMBER_OF_HOLES)
-            holeScores[yPos].setOnClickListener(new HoleScoreOnClickListener(yPos));
+                holeScores[yPos].setOnClickListener(new HoleScoreOnClickListener(yPos));
 
-            if(yPos == INDEX_SAVE_BUTTON)
+            if(yPos == INDEX_SAVE_BUTTON){
                 holeScores[yPos].setOnClickListener(new SaveRoundOnClickListener());
+                holeScores[yPos].setTextColor(Color.argb(255, 0, 255, 0));
+                holeScores[yPos].setBackgroundColor(Color.argb(255, 0, 0, 0));
+            }
         }
 
         for (Integer xPos = 0; xPos < numberOfColumns - RESERVED_COLUMNS; xPos++) {
@@ -75,11 +76,11 @@ public class PlayRoundViews {
 
     public void putViewsIntoGridlayout(){
 
-        gridWidth = gridLayout.getWidth();
-        gridHeight = ((gridLayout.getHeight()) - (numberOfRows * ROW_MARGIN));
+        Integer gridWidth = gridLayout.getWidth();
+        Integer gridHeight = ((gridLayout.getHeight()) - (numberOfRows * ROW_MARGIN));
 
-        elementWidth = gridWidth / numberOfColumns;
-        elementHeight = gridHeight / numberOfRows;
+        Integer elementWidth = gridWidth / numberOfColumns;
+        Integer elementHeight = gridHeight / numberOfRows;
 
         int column = 0;
 
@@ -226,5 +227,39 @@ public class PlayRoundViews {
             holeScores[INDEX_TOTAL_SCORE].setText(roundScore.toString());
 
         }
+    }
+
+    public void writeContentToViews(PlayRoundContent content){
+
+        for(int i=0; i<NUMBER_OF_HOLES; i++)
+            holeNames[i].setText(content.getHoleNames()[i]);
+
+        for(int i=0; i<numberOfRows; i++)
+            holeScores[i].setText(content.getHoleScores()[i]);
+
+        for(Integer xPos=0; xPos<(numberOfColumns-RESERVED_COLUMNS); xPos++)
+            for(Integer yPos=0; yPos<numberOfRows; yPos++)
+                playedRounds[xPos][yPos].setText(content.getPlayedRounds()[yPos + (xPos*numberOfRows)]);
+    }
+
+    public static void fillContentFromViews(PlayRoundContent content){
+
+        CharSequence[] holeNamesContent = new CharSequence[NUMBER_OF_HOLES];
+        CharSequence[] holeScoresContent = new CharSequence[numberOfRows];
+        CharSequence[] playedRoundsContent = new CharSequence[numberOfRows * (numberOfColumns-RESERVED_COLUMNS)];
+
+        for(int i=0; i<NUMBER_OF_HOLES; i++)
+            holeNamesContent[i] = holeNames[i].getText();
+
+        for(int i=0; i<numberOfRows; i++)
+            holeScoresContent[i] = holeScores[i].getText();
+
+        for(int xPos=0; xPos<(numberOfColumns-RESERVED_COLUMNS); xPos++)
+            for(int yPos=0; yPos<numberOfRows; yPos++)
+                playedRoundsContent[yPos + (xPos*numberOfRows)] = playedRounds[xPos][yPos].getText();
+
+        content.setHoleNames(holeNamesContent);
+        content.setHoleScores(holeScoresContent);
+        content.setPlayedRounds(playedRoundsContent);
     }
 }
