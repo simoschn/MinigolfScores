@@ -27,6 +27,8 @@ public class MainActivity extends ActionBarActivity {
 
     String selectedClub = "";
 
+    static SQLiteDatabase roundsDb = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -38,19 +40,30 @@ public class MainActivity extends ActionBarActivity {
 
         initSelectClubSpinner();
 
-        //displaySelectedCourseDetails();
+        RoundsDBHelper dbHelper = new RoundsDBHelper(this.getApplicationContext());
+
+        roundsDb = dbHelper.getReadableDatabase();
     }
 
     private void initSelectClubSpinner() {
+
         fillSpinnerFromCourseDb();
 
         selectClubSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                Log.d(TAG, "Item selected");
+                String buffer ="";
 
                 displaySelectedCourseDetails();
+
+                Log.d(TAG, selectedClub);
+
+                buffer = StatsStringMaker.lastTrainingAtSelectedClub(roundsDb, selectedClub);
+
+                TextView lastTrainingText = (TextView)findViewById(R.id.text_view_last_training);
+
+                lastTrainingText.setText(getString(R.string.last_training) + "\n" + buffer);
+
             }
 
             @Override

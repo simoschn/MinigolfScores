@@ -21,4 +21,6 @@
     <string name="title_activity_show_course_details">Platz anzeigen</string>
     <string name="title_activity_play_round">PlayRound</string>
 
+    <string name="last_training">Letztes Training</string>
+
 </resources>
