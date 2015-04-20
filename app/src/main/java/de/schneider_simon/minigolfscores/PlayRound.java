@@ -1,18 +1,12 @@
 package de.schneider_simon.minigolfscores;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.GridLayout;
-import android.widget.TextView;
 
 public class PlayRound extends ActionBarActivity {
 
@@ -30,11 +24,10 @@ public class PlayRound extends ActionBarActivity {
 
     private static Bundle bundle;
 
+    private static boolean putViewsDone;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        Log.d(TAG, "onCreate");
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_round);
 
@@ -47,13 +40,11 @@ public class PlayRound extends ActionBarActivity {
         playRoundViews = new PlayRoundViews(gridLayout, selectedClub, this);
         playRoundContent = new PlayRoundContent(gridLayout.getColumnCount(), gridLayout.getRowCount(), RESERVED_COLUMNS);
 
+        putViewsDone = false;
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-
-        Log.d(TAG, "onWindowFocusChanged");
-
         super.onWindowFocusChanged(hasFocus);
 
         if(hasFocus){
@@ -64,8 +55,12 @@ public class PlayRound extends ActionBarActivity {
             else
                 playRoundContent.setContentFromBundle(bundle);
 
+            if(!putViewsDone){
+                playRoundViews.putViewsIntoGridlayout();
+                putViewsDone = true;
+            }
+
             playRoundViews.writeContentToViews(playRoundContent);
-            playRoundViews.putViewsIntoGridlayout();
         }
     }
 
@@ -92,22 +87,17 @@ public class PlayRound extends ActionBarActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-
-        Log.d(TAG, "onSaveInstanceState");
-
+        playRoundViews.fillContentFromViews(playRoundContent);
         playRoundContent.putContentToBundle(savedInstanceState);
 
         super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-
-        Log.d(TAG, "onRestoreInstanceState");
+    public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
 
         super.onRestoreInstanceState(savedInstanceState);
 
         playRoundContent.setContentFromBundle(savedInstanceState);
     }
-
 }

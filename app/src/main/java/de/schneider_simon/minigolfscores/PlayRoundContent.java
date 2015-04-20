@@ -25,35 +25,41 @@ public class PlayRoundContent {
     }
 
     public void init(){
+        initHoleNames();
+        initHoleScores();
+        initPlayedRounds();
+    }
 
-        for(int i=0; i < numberOfRows-2; i++)
-            holeNames[i] = "Bahn " + (i+1);
+    private void initPlayedRounds() {
+        for(int i = 0; i < (numberOfColumns-reservedColumns)*numberOfRows; i++ )
+                playedRounds[i] = "0";
+    }
+
+    private void initHoleScores() {
+        final String SAVE_ICON = "\u2714";
 
         for(int i=0; i < numberOfRows-2; i++)
             holeScores[i] = "1";
 
         holeScores[numberOfRows-2] = "18";
+        holeScores[numberOfRows-1] = SAVE_ICON;
+    }
 
-        holeScores[numberOfRows-1] = "\u2714";
-
-        for(int i = 0; i < (numberOfColumns-reservedColumns)*numberOfRows; i++ )
-                playedRounds[i] = "0";
+    private void initHoleNames() {
+        for(int i=0; i < numberOfRows-2; i++)
+            holeNames[i] = "Bahn " + (i+1);
     }
 
     public void setContentFromBundle(Bundle bundle){
-
         holeNames = bundle.getCharSequenceArray("holeNames");
         holeScores = bundle.getCharSequenceArray("holeScores");
         playedRounds = bundle.getCharSequenceArray("playedRounds");
-
     }
 
     public void putContentToBundle(Bundle bundle){
-
         bundle.putCharSequenceArray("holeNames", holeNames);
         bundle.putCharSequenceArray("holeScores", holeScores);
         bundle.putCharSequenceArray("playedRounds", playedRounds);
-
     }
 
     public CharSequence[] getHoleNames(){
