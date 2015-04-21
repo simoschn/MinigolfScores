@@ -25,7 +25,6 @@ public class StatsStringMaker {
                 "hole3",
                 "hole4",
                 "hole5",
-                "hole5",
                 "hole6",
                 "hole7",
                 "hole8",
