@@ -3,7 +3,6 @@ package de.schneider_simon.minigolfscores;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridLayout;
@@ -24,7 +23,7 @@ public class PlayRound extends ActionBarActivity {
 
     private static Bundle bundle;
 
-    private static boolean putViewsDone;
+    private static boolean isPutViewsDone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,12 @@ public class PlayRound extends ActionBarActivity {
         playRoundViews = new PlayRoundViews(gridLayout, selectedClub, this);
         playRoundContent = new PlayRoundContent(gridLayout.getColumnCount(), gridLayout.getRowCount(), RESERVED_COLUMNS);
 
-        putViewsDone = false;
+        if(bundle == null)
+            playRoundContent.init();
+        else
+            playRoundContent.setContentFromBundle(bundle);
+
+        isPutViewsDone = false;
     }
 
     @Override
@@ -50,16 +54,10 @@ public class PlayRound extends ActionBarActivity {
         if(hasFocus){
             setTitle(selectedClub);
 
-            if(bundle == null)
-                playRoundContent.init();
-            else
-                playRoundContent.setContentFromBundle(bundle);
-
-            if(!putViewsDone){
+            if(!isPutViewsDone){
                 playRoundViews.putViewsIntoGridlayout();
-                putViewsDone = true;
+                isPutViewsDone = true;
             }
-
             playRoundViews.writeContentToViews(playRoundContent);
         }
     }
