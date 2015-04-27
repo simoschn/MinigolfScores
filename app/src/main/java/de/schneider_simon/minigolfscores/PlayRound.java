@@ -12,7 +12,7 @@ public class PlayRound extends ActionBarActivity {
     private static final String TAG = "PlayRound";
 
     private static final Integer NUMBER_OF_HOLE_NAMES_COLUMNS = 2;
-    private static final Integer RESERVED_COLUMNS = 1 + NUMBER_OF_HOLE_NAMES_COLUMNS;
+    private static final Integer RESERVED_COLUMNS = NUMBER_OF_HOLE_NAMES_COLUMNS + 1;
 
     PlayRoundViews playRoundViews;
     PlayRoundContent playRoundContent;
