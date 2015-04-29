@@ -8,8 +8,8 @@ import java.util.Date;
 
 public class StatsStringMaker {
 
-    private static String TAG = "StatsStringMaker: ";
     private static String FORMAT = "dd.MM.yyyy";
+    private static String TAG = "StatsStringMaker: ";
 
     public static String lastTrainingAtSelectedClub(SQLiteDatabase roundsDb, String selectedClub) {
 
