@@ -2,7 +2,6 @@ package de.schneider_simon.minigolfscores;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,70 +9,80 @@ import java.util.Date;
 public class StatsStringMaker {
 
     private static String TAG = "StatsStringMaker: ";
+    private static String FORMAT = "dd.MM.yyyy";
 
     public static String lastTrainingAtSelectedClub(SQLiteDatabase roundsDb, String selectedClub) {
 
-        Long lastDate;
-        String buffer = "";
-        Integer roundScore = 0;
-        String mostRecentDate = "";
+        String statsString;
+        String mostRecentDate;
 
-        Cursor roundsCursor = roundsDb.query("Rounds", new String[]{
-                "datetime",
-                "hole1",
-                "hole2",
-                "hole3",
-                "hole4",
-                "hole5",
-                "hole6",
-                "hole7",
-                "hole8",
-                "hole9",
-                "hole10",
-                "hole11",
-                "hole12",
-                "hole13",
-                "hole14",
-                "hole15",
-                "hole16",
-                "hole17",
-                "hole18"
-        }, "club='" + selectedClub + "'", null, null, null, "datetime DESC", null);
+        Cursor roundsCursor = setRoundsCursor(roundsDb, selectedClub);
+
+        if(isNoRoundPlayedYet(roundsCursor))
+            return "";
 
         roundsCursor.moveToFirst();
+        mostRecentDate = extractDateStringFromDatetimeAtCursor(roundsCursor);
+        statsString = mostRecentDate + newline();
 
-        if (roundsCursor.getCount() > 0) {
-            lastDate = roundsCursor.getLong(0);
-            Date date = new Date(lastDate * 1000);
-            SimpleDateFormat simpleDate = new SimpleDateFormat("dd.MM.yyyy");
-            mostRecentDate = simpleDate.format(date);
-            buffer = simpleDate.format(date) + newline();
+        return statsString + getPlayedRoundsAtDateFromCursor(mostRecentDate, roundsCursor);
+    }
 
-            for(;;) {
-                roundScore = 0;
+    private static String getPlayedRoundsAtDateFromCursor(String mostRecentDate, Cursor roundsCursor) {
+        Integer roundScore;
+        String playedRoundsAtDate = "";
+        do {
+            roundScore = calculateRoundScoreAtCursor(roundsCursor);
+            playedRoundsAtDate += roundScore + space();
+            } while(isAnotherRoundWithSameDate(mostRecentDate, roundsCursor));
+        return playedRoundsAtDate;
+    }
 
-                for (int i = 1; i <= 18; i++)
-                    roundScore += roundsCursor.getInt(i);
+    private static Cursor setRoundsCursor(SQLiteDatabase roundsDb, String selectedClub) {
+        return roundsDb.query("Rounds", new String[]{
+                    "datetime",
+                    "hole1",
+                    "hole2",
+                    "hole3",
+                    "hole4",
+                    "hole5",
+                    "hole6",
+                    "hole7",
+                    "hole8",
+                    "hole9",
+                    "hole10",
+                    "hole11",
+                    "hole12",
+                    "hole13",
+                    "hole14",
+                    "hole15",
+                    "hole16",
+                    "hole17",
+                    "hole18"
+            }, "club='" + selectedClub + "'", null, null, null, "datetime DESC", null);
+    }
 
-                buffer += roundScore + space();
+    private static Integer calculateRoundScoreAtCursor(Cursor roundsCursor) {
+        Integer roundScore;
+        roundScore = 0;
+        for (int i = 1; i <= 18; i++)
+            roundScore += roundsCursor.getInt(i);
+        return roundScore;
+    }
 
-                roundsCursor.moveToNext();
+    private static boolean isAnotherRoundWithSameDate(String mostRecentDate, Cursor roundsCursor) {
+        return roundsCursor.moveToNext() && extractDateStringFromDatetimeAtCursor(roundsCursor).equals(mostRecentDate);
+    }
 
-                if(roundsCursor.isAfterLast())
-                    break;
+    private static boolean isNoRoundPlayedYet(Cursor roundsCursor) {
+        return roundsCursor.getCount() == 0;
+    }
 
-                lastDate = roundsCursor.getLong(0);
-                date = new Date(lastDate * 1000);
-                simpleDate = new SimpleDateFormat("dd.MM.yyyy");
-
-  /*            Log.d(TAG, mostRecentDate);
-                Log.d(TAG, simpleDate.format(date));
-
-               if(!mostRecentDate.equals(simpleDate.format(date)))
-                    break;*/
-            }
-        }
-        return buffer;
+    private static String extractDateStringFromDatetimeAtCursor(Cursor roundsCursor) {
+        Long lastDate = roundsCursor.getLong(0);
+        Date date = new Date(lastDate * 1000);
+        SimpleDateFormat simpleDate = new SimpleDateFormat(FORMAT);
+        return simpleDate.format(date);
     }
 
     private static String newline(){
