@@ -2,85 +2,139 @@ package de.schneider_simon.minigolfscores;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class StatsStringMaker {
 
+    private static String FORMAT = "dd.MM.yyyy";
     private static String TAG = "StatsStringMaker: ";
 
     public static String lastTrainingAtSelectedClub(SQLiteDatabase roundsDb, String selectedClub) {
 
-        Long lastDate;
-        String buffer = "";
-        Integer roundScore = 0;
-        String mostRecentDate = "";
+        String statsString;
+        String mostRecentDate;
+        ArrayList<Integer> roundsList;
+        ArrayList<Integer> totalsList;
 
-        Cursor roundsCursor = roundsDb.query("Rounds", new String[]{
-                "datetime",
-                "hole1",
-                "hole2",
-                "hole3",
-                "hole4",
-                "hole5",
-                "hole6",
-                "hole7",
-                "hole8",
-                "hole9",
-                "hole10",
-                "hole11",
-                "hole12",
-                "hole13",
-                "hole14",
-                "hole15",
-                "hole16",
-                "hole17",
-                "hole18"
-        }, "club='" + selectedClub + "'", null, null, null, "datetime DESC", null);
+        Cursor roundsCursor = setRoundsCursor(roundsDb, selectedClub);
+
+        if(isNoRoundPlayedYet(roundsCursor))
+            return "";
 
         roundsCursor.moveToFirst();
+        mostRecentDate = extractDateStringFromDatetimeAtCursor(roundsCursor);
+        statsString = mostRecentDate + newline() + newline();
 
-        if (roundsCursor.getCount() > 0) {
-            lastDate = roundsCursor.getLong(0);
-            Date date = new Date(lastDate * 1000);
-            SimpleDateFormat simpleDate = new SimpleDateFormat("dd.MM.yyyy");
-            mostRecentDate = simpleDate.format(date);
-            buffer = simpleDate.format(date) + newline();
+        roundsList = getRoundsListAtDateFromCursor(mostRecentDate, roundsCursor);
+        totalsList = getTotalsListFromRoundsList(roundsList);
 
-            for(;;) {
-                roundScore = 0;
+        statsString += makeScoresStringFromScoresList(roundsList) + newline();
+        statsString += makeScoresStringFromScoresList(totalsList) + newline() + newline();
+        statsString += makeAverageStringFromScoresList(roundsList);
 
-                for (int i = 1; i <= 18; i++)
-                    roundScore += roundsCursor.getInt(i);
+        return statsString;
+    }
 
-                buffer += roundScore + space();
+    private static ArrayList<Integer> getRoundsListAtDateFromCursor(String mostRecentDate, Cursor roundsCursor){
+        Integer roundScore;
+        ArrayList<Integer> roundsList = new ArrayList<>();
 
-                roundsCursor.moveToNext();
+        do {
+            roundScore = calculateRoundScoreAtCursor(roundsCursor);
+            roundsList.add(0, roundScore);
+        } while(isAnotherRoundWithSameDate(mostRecentDate, roundsCursor));
 
-                if(roundsCursor.isAfterLast())
-                    break;
+        return roundsList;
+    }
 
-                lastDate = roundsCursor.getLong(0);
-                date = new Date(lastDate * 1000);
-                simpleDate = new SimpleDateFormat("dd.MM.yyyy");
+    private static ArrayList<Integer> getTotalsListFromRoundsList(ArrayList<Integer> roundsList){
+        ArrayList<Integer> totalsList = new ArrayList<>();
 
-  /*            Log.d(TAG, mostRecentDate);
-                Log.d(TAG, simpleDate.format(date));
+        totalsList.add(0, roundsList.get(0));
 
-               if(!mostRecentDate.equals(simpleDate.format(date)))
-                    break;*/
+        for(Integer index=1; index<roundsList.size(); index++){
+            totalsList.add(index, totalsList.get(index-1) + roundsList.get(index));
+        }
+
+        return totalsList;
+    }
+
+    private static String makeScoresStringFromScoresList(ArrayList<Integer> scoresList) {
+        String scoresString = "";
+        boolean isFirst = true;
+
+        for(Integer round : scoresList){
+            if(isFirst) {
+                scoresString += round.toString();
+                isFirst = false;
+            }
+            else{
+                scoresString += String.format("%5d", round);
             }
         }
-        return buffer;
+        return scoresString;
+    }
+
+    private static String makeAverageStringFromScoresList(ArrayList<Integer> scoresList){
+        Double totalScore = 0.0;
+
+        for(Integer round : scoresList){
+            totalScore += round;
+        }
+        return String.format("%.2f", totalScore / scoresList.size());
+    }
+
+    private static Cursor setRoundsCursor(SQLiteDatabase roundsDb, String selectedClub) {
+        return roundsDb.query("Rounds", new String[]{
+                    "datetime",
+                    "hole1",
+                    "hole2",
+                    "hole3",
+                    "hole4",
+                    "hole5",
+                    "hole6",
+                    "hole7",
+                    "hole8",
+                    "hole9",
+                    "hole10",
+                    "hole11",
+                    "hole12",
+                    "hole13",
+                    "hole14",
+                    "hole15",
+                    "hole16",
+                    "hole17",
+                    "hole18"
+            }, "club='" + selectedClub + "'", null, null, null, "datetime DESC", null);
+    }
+
+    private static Integer calculateRoundScoreAtCursor(Cursor roundsCursor) {
+        Integer roundScore;
+        roundScore = 0;
+        for (int i = 1; i <= 18; i++)
+            roundScore += roundsCursor.getInt(i);
+        return roundScore;
+    }
+
+    private static boolean isAnotherRoundWithSameDate(String mostRecentDate, Cursor roundsCursor) {
+        return roundsCursor.moveToNext() && extractDateStringFromDatetimeAtCursor(roundsCursor).equals(mostRecentDate);
+    }
+
+    private static boolean isNoRoundPlayedYet(Cursor roundsCursor) {
+        return roundsCursor.getCount() == 0;
+    }
+
+    private static String extractDateStringFromDatetimeAtCursor(Cursor roundsCursor) {
+        Long lastDate = roundsCursor.getLong(0);
+        Date date = new Date(lastDate * 1000);
+        SimpleDateFormat simpleDate = new SimpleDateFormat(FORMAT);
+        return simpleDate.format(date);
     }
 
     private static String newline(){
         return "\n";
-    }
-
-    private static String space(){
-        return " ";
     }
 }
