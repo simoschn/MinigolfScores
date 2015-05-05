@@ -47,35 +47,40 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:id="@+id/text_view_system"
-            android:text="@string/system_hint" />
+            android:text="@string/system_hint"
+            android:typeface="monospace" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/street_hint"
-            android:id="@+id/text_view_street" />
+            android:id="@+id/text_view_street"
+            android:typeface="monospace" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/street_number_hint"
-            android:id="@+id/text_view_street_number" />
+            android:id="@+id/text_view_street_number"
+            android:typeface="monospace" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/zipcode_hint"
-            android:id="@+id/text_view_zipcode" />
+            android:id="@+id/text_view_zipcode"
+            android:typeface="monospace" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/city_hint"
-            android:id="@+id/text_view_city" />
+            android:id="@+id/text_view_city"
+            android:typeface="monospace" />
 
         <TextView
             android:layout_width="wrap_content"

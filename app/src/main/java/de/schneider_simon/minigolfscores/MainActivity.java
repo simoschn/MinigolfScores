@@ -62,7 +62,7 @@ public class MainActivity extends ActionBarActivity {
 
                 TextView lastTrainingText = (TextView)findViewById(R.id.text_view_last_training);
 
-                lastTrainingText.setText(getString(R.string.last_training) + "\n" + buffer);
+                lastTrainingText.setText("\n\n\n\n" + getString(R.string.last_training) + "\n" + buffer);
 
             }
 

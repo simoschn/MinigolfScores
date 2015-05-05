@@ -40,7 +40,6 @@ public class CreateCourse extends ActionBarActivity {
         CourseDBHelper dbHelper = new CourseDBHelper(getApplicationContext());
 
         db = dbHelper.getWritableDatabase();
-
     }
 
     private void initEditTextCity() {
