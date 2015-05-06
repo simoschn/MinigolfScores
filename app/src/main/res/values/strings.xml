@@ -8,6 +8,9 @@
     <string name="show_course_details">Platz anzeigen...</string>
     <string name="title_activity_create_course">Neuen Platz anlegen</string>
     <string name="play_round">Runde spielen!</string>
+    <string name="stats">Statistiken...</string>
+
+    <string name="last_training_hint">Letztes Training</string>
 
     <string name="club_hint">Verein</string>
     <string name="system_hint">System</string>
@@ -22,5 +25,6 @@
     <string name="title_activity_play_round">PlayRound</string>
 
     <string name="last_training">Letztes Training</string>
+    <string name="title_activity_statistics">Statistiken</string>
 
 </resources>

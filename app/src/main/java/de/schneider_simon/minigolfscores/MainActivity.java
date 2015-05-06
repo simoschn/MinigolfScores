@@ -37,6 +37,7 @@ public class MainActivity extends ActionBarActivity {
 
         initNewCourseButton();
         initPlayRoundButton();
+        initStatsButton();
 
         initSelectClubSpinner();
 
@@ -62,7 +63,7 @@ public class MainActivity extends ActionBarActivity {
 
                 TextView lastTrainingText = (TextView)findViewById(R.id.text_view_last_training);
 
-                lastTrainingText.setText("\n\n\n\n" + getString(R.string.last_training) + "\n" + buffer);
+                lastTrainingText.setText(getString(R.string.last_training) + "\n" + buffer);
 
             }
 
@@ -81,6 +82,11 @@ public class MainActivity extends ActionBarActivity {
     private void initPlayRoundButton() {
         Button playRoundButton = (Button) findViewById(R.id.play_round_button);
         playRoundButton.setOnClickListener(new MyPlayRoundOnClickListener());
+    }
+
+    private void initStatsButton() {
+        Button statsButton = (Button) findViewById(R.id.stats_button);
+        statsButton.setOnClickListener(new MyStatsOnClickListener());
     }
 
     private void displaySelectedCourseDetails() {
@@ -217,6 +223,16 @@ public class MainActivity extends ActionBarActivity {
             Intent playRound = new Intent(MainActivity.this, PlayRound.class);
             playRound.putExtra("club", selectedClub);
             startActivity(playRound);
+        }
+    }
+
+    class MyStatsOnClickListener implements OnClickListener {
+
+        public void onClick(View view) {
+
+            Intent statistics = new Intent(MainActivity.this, Statistics.class);
+            statistics.putExtra("club", selectedClub);
+            startActivity(statistics);
         }
     }
 }
