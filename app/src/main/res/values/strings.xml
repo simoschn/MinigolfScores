@@ -25,6 +25,15 @@
     <string name="title_activity_play_round">PlayRound</string>
 
     <string name="last_training">Letztes Training</string>
+    <string name="all_rounds">Alle Runden bei</string>
     <string name="title_activity_statistics">Statistiken</string>
+    <string name="rounds_total">Runden insgesamt:</string>
+    <string name="average_total">Gesamtschnitt:</string>
 
+    <string name="select_stats_spinner_prompt">Statistik wählen...</string>
+
+    <string-array name="select_stats">
+        <item>Alle Runden</item>
+        <item>Bahnen Durchschnitte</item>
+    </string-array>
 </resources>

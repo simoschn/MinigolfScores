@@ -38,6 +38,70 @@ public class StatsStringMaker {
         return statsString;
     }
 
+    public static String allRoundsAtSelectedClub(SQLiteDatabase roundsDb, String selectedClub){
+        String statsString = "";
+
+        String currentDate;
+        ArrayList<Integer> roundsList;
+        ArrayList<Integer> totalsList;
+
+        Cursor roundsCursor = setRoundsCursor(roundsDb, selectedClub);
+
+        if(isNoRoundPlayedYet(roundsCursor))
+            return "";
+
+        roundsCursor.moveToFirst();
+        while(!roundsCursor.isAfterLast()){
+            currentDate = extractDateStringFromDatetimeAtCursor(roundsCursor);
+            statsString += currentDate + newline() + newline();
+
+            roundsList = getRoundsListAtDateFromCursor(currentDate, roundsCursor);
+            totalsList = getTotalsListFromRoundsList(roundsList);
+
+            statsString += makeScoresStringFromScoresList(roundsList) + newline();
+            statsString += makeScoresStringFromScoresList(totalsList) + newline() + newline();
+            statsString += makeAverageStringFromScoresList(roundsList)+ newline() + newline();
+        }
+        return statsString;
+    }
+
+    public static String roundsAverageAtSelectedClub(SQLiteDatabase roundsDb, String selectedClub){
+        Double sumOfAllRounds = 0.0;
+        Integer numberOfRounds = 0;
+        Double average;
+        String averageString;
+        ArrayList<Integer> allRoundsList;
+        Cursor roundsCursor = setRoundsCursor(roundsDb, selectedClub);
+        if(isNoRoundPlayedYet(roundsCursor))
+            return "";
+
+        roundsCursor.moveToFirst();
+        allRoundsList = getRoundsListFromCursor(roundsCursor);
+
+        for(Integer round : allRoundsList){
+            sumOfAllRounds += round;
+            numberOfRounds++;
+        }
+
+        average = sumOfAllRounds/numberOfRounds;
+
+        averageString = String.format("%.2f", average);
+
+        return averageString.toString();
+    }
+
+    public static String totalNumberOfRoundsAtSelectedClub(SQLiteDatabase roundsDb, String selectedClub){
+        ArrayList<Integer> allRoundsList;
+        Cursor roundsCursor = setRoundsCursor(roundsDb, selectedClub);
+        if(isNoRoundPlayedYet(roundsCursor))
+            return "";
+
+        roundsCursor.moveToFirst();
+        allRoundsList = getRoundsListFromCursor(roundsCursor);
+
+        return ((Integer)allRoundsList.size()).toString();
+    }
+
     private static ArrayList<Integer> getRoundsListAtDateFromCursor(String mostRecentDate, Cursor roundsCursor){
         Integer roundScore;
         ArrayList<Integer> roundsList = new ArrayList<>();
@@ -46,6 +110,19 @@ public class StatsStringMaker {
             roundScore = calculateRoundScoreAtCursor(roundsCursor);
             roundsList.add(0, roundScore);
         } while(isAnotherRoundWithSameDate(mostRecentDate, roundsCursor));
+
+        return roundsList;
+    }
+
+    private static ArrayList<Integer> getRoundsListFromCursor(Cursor roundsCursor){
+        Integer roundScore;
+        ArrayList<Integer> roundsList = new ArrayList<>();
+
+        do {
+            roundScore = calculateRoundScoreAtCursor(roundsCursor);
+            roundsList.add(0, roundScore);
+            roundsCursor.moveToNext();
+        } while(!roundsCursor.isAfterLast());
 
         return roundsList;
     }
