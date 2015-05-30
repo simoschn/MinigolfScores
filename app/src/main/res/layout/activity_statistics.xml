@@ -26,6 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="New Text"
-            android:id="@+id/stats_text_view" />
+            android:id="@+id/stats_text_view"
+            android:typeface="monospace" />
     </ScrollView>
 </RelativeLayout>
