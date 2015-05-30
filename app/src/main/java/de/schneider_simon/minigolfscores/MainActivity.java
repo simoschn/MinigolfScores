@@ -38,6 +38,7 @@ public class MainActivity extends ActionBarActivity {
         initNewCourseButton();
         initPlayRoundButton();
         initStatsButton();
+        initHoleNamesButton();
 
         initSelectClubSpinner();
 
@@ -53,7 +54,7 @@ public class MainActivity extends ActionBarActivity {
         selectClubSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String buffer ="";
+                String buffer;
 
                 displaySelectedCourseDetails();
 
@@ -87,6 +88,11 @@ public class MainActivity extends ActionBarActivity {
     private void initStatsButton() {
         Button statsButton = (Button) findViewById(R.id.stats_button);
         statsButton.setOnClickListener(new MyStatsOnClickListener());
+    }
+
+    private void initHoleNamesButton() {
+        Button holeNamesButton = (Button) findViewById(R.id.holenames_button);
+        holeNamesButton.setOnClickListener(new MyHoleNamesOnClickListener());
     }
 
     private void displaySelectedCourseDetails() {
@@ -233,6 +239,16 @@ public class MainActivity extends ActionBarActivity {
             Intent statistics = new Intent(MainActivity.this, Statistics.class);
             statistics.putExtra("club", selectedClub);
             startActivity(statistics);
+        }
+    }
+
+    class MyHoleNamesOnClickListener implements OnClickListener {
+
+        public void onClick(View view) {
+
+            Intent holeNames = new Intent(MainActivity.this, EnterHoleNames.class);
+            holeNames.putExtra("club", selectedClub);
+            startActivity(holeNames);
         }
     }
 }

@@ -39,6 +39,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.schneider_simon.minigolfscores.MainActivity" />
         </activity>
+        <activity
+            android:name=".EnterHoleNames"
+            android:label="@string/title_activity_enter_hole_names"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.schneider_simon.minigolfscores.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

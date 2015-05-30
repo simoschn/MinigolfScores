@@ -9,6 +9,8 @@
     <string name="title_activity_create_course">Neuen Platz anlegen</string>
     <string name="play_round">Runde spielen!</string>
     <string name="stats">Statistiken...</string>
+    <string name="holenames">Bahnen eingeben...</string>
+    <string name="save_holenames">Bahnen speichern</string>
 
     <string name="last_training_hint">Letztes Training</string>
 
@@ -18,6 +20,25 @@
     <string name="street_number_hint">Hausnummer</string>
     <string name="zipcode_hint">PLZ</string>
     <string name="city_hint">Stadt</string>
+
+    <string name="hole1_hint">Bahn 1</string>
+    <string name="hole2_hint">Bahn 2</string>
+    <string name="hole3_hint">Bahn 3</string>
+    <string name="hole4_hint">Bahn 4</string>
+    <string name="hole5_hint">Bahn 5</string>
+    <string name="hole6_hint">Bahn 6</string>
+    <string name="hole7_hint">Bahn 7</string>
+    <string name="hole8_hint">Bahn 8</string>
+    <string name="hole9_hint">Bahn 9</string>
+    <string name="hole10_hint">Bahn 10</string>
+    <string name="hole11_hint">Bahn 11</string>
+    <string name="hole12_hint">Bahn 12</string>
+    <string name="hole13_hint">Bahn 13</string>
+    <string name="hole14_hint">Bahn 14</string>
+    <string name="hole15_hint">Bahn 15</string>
+    <string name="hole16_hint">Bahn 16</string>
+    <string name="hole17_hint">Bahn 17</string>
+    <string name="hole18_hint">Bahn 18</string>
 
     <string name="not_set">-</string>
     <string name="save_button">Speichern</string>
@@ -36,4 +57,5 @@
         <item>Alle Runden</item>
         <item>Bahnen Durchschnitte</item>
     </string-array>
+    <string name="title_activity_enter_hole_names">EnterHoleNames</string>
 </resources>

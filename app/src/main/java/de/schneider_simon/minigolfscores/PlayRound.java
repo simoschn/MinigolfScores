@@ -3,6 +3,7 @@ package de.schneider_simon.minigolfscores;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridLayout;
@@ -28,6 +29,7 @@ public class PlayRound extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_play_round);
 
         bundle = savedInstanceState;
@@ -56,9 +58,9 @@ public class PlayRound extends ActionBarActivity {
 
             if(!isPutViewsDone){
                 playRoundViews.putViewsIntoGridlayout();
+                playRoundViews.writeContentToViews(playRoundContent);
                 isPutViewsDone = true;
             }
-            playRoundViews.writeContentToViews(playRoundContent);
         }
     }
 
@@ -97,5 +99,23 @@ public class PlayRound extends ActionBarActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         playRoundContent.setContentFromBundle(savedInstanceState);
+
+    }
+
+    @Override
+    public void onPause(){
+
+        playRoundViews.fillContentFromViews(playRoundContent);
+
+        super.onPause();
+    }
+
+    @Override
+    public void onResume(){
+
+        if(isPutViewsDone)
+            playRoundViews.writeContentToViews(playRoundContent);
+
+        super.onResume();
     }
 }

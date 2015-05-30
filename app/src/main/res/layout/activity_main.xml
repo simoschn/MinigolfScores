@@ -94,6 +94,12 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/holenames"
+            android:id="@+id/holenames_button" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/create_course"
             android:id="@+id/new_course_button" />
     </LinearLayout>
