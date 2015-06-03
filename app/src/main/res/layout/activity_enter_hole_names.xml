@@ -17,132 +17,134 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole1_textView"
-                android:editable="true"
-                android:hint="@string/hole1_hint" />
+                android:text="@string/hole1_hint"
+                android:inputType="text"/>
+
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole2_textView"
-                android:editable="true"
-                android:hint="@string/hole2_hint" />
+                android:text="@string/hole2_hint"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole3_textView"
-                android:editable="true"
-                android:hint="@string/hole3_hint" />
+                android:text="@string/hole3_hint"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole4_textView"
-                android:editable="true"
-                android:hint="@string/hole4_hint" />
+                android:text="@string/hole4_hint"
+                android:inputType="text"/>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole5_textView"
-                android:editable="true"
-                android:hint="@string/hole5_hint" />
+                android:text="@string/hole5_hint"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole6_textView"
-                android:editable="true"
-                android:hint="@string/hole6_hint" />
+                android:text="@string/hole6_hint"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole7_textView"
-                android:editable="true"
-                android:hint="@string/hole7_hint" />
+                android:text="@string/hole7_hint"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole8_textView"
-                android:editable="true"
-                android:hint="@string/hole8_hint" />
+                android:text="@string/hole8_hint"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole9_textView"
-                android:editable="true"
-                android:hint="@string/hole9_hint" />
+                android:text="@string/hole9_hint"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole10_textView"
-                android:editable="true"
-                android:hint="@string/hole10_hint" />
+                android:text="@string/hole10_hint"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole11_textView"
-                android:editable="true"
-                android:hint="@string/hole11_hint" />
+                android:text="@string/hole11_hint"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole12_textView"
-                android:editable="true"
-                android:hint="@string/hole12_hint" />
+                android:text="@string/hole12_hint"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole13_textView"
-                android:editable="true"
-                android:hint="@string/hole13_hint" />
+                android:text="@string/hole13_hint"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole14_textView"
-                android:editable="true"
-                android:hint="@string/hole14_hint" />
+                android:text="@string/hole14_hint"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole15_textView"
-                android:editable="true"
-                android:hint="@string/hole15_hint" />
+                android:text="@string/hole15_hint"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole16_textView"
-                android:editable="true"
-                android:hint="@string/hole16_hint" />
+                android:text="@string/hole16_hint"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole17_textView"
-                android:editable="true"
-                android:hint="@string/hole17_hint" />
+                android:text="@string/hole17_hint"
+                android:inputType="text"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/hole18_textView"
-                android:editable="true"
-                android:hint="@string/hole18_hint" />
+                android:text="@string/hole18_hint"
+                android:inputType="text"/>
 
             <Button
                 android:layout_width="match_parent"

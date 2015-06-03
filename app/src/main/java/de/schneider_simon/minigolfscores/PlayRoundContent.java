@@ -1,5 +1,7 @@
 package de.schneider_simon.minigolfscores;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 public class PlayRoundContent {
@@ -12,6 +14,8 @@ public class PlayRoundContent {
     private static Integer numberOfRows;
     private static Integer reservedColumns;
 
+    private static String[] holeNamesFromDb = new String[18];
+
     public PlayRoundContent(Integer cols, Integer rows, Integer reservedCols){
 
         numberOfColumns = cols;
@@ -22,6 +26,20 @@ public class PlayRoundContent {
         holeScores = new CharSequence[numberOfRows];
         playedRounds = new CharSequence[(numberOfColumns - reservedColumns) * numberOfRows];
 
+        holeNamesFromDb = null;
+    }
+
+    public PlayRoundContent(Integer cols, Integer rows, Integer reservedCols, String[] holeNamesDb){
+
+        numberOfColumns = cols;
+        numberOfRows = rows;
+        reservedColumns = reservedCols;
+
+        holeNames = new CharSequence[numberOfRows - 2];
+        holeScores = new CharSequence[numberOfRows];
+        playedRounds = new CharSequence[(numberOfColumns - reservedColumns) * numberOfRows];
+
+        holeNamesFromDb = holeNamesDb;
     }
 
     public void init(){
@@ -46,8 +64,12 @@ public class PlayRoundContent {
     }
 
     private void initHoleNames() {
-        for(int i=0; i < numberOfRows-2; i++)
-            holeNames[i] = "Bahn " + (i+1);
+        if(holeNamesFromDb == null)
+            for(int i=0; i < numberOfRows-2; i++)
+                holeNames[i] = "Bahn " + (i+1);
+        else
+            for(int i=0; i < numberOfRows-2; i++)
+                holeNames[i] = holeNamesFromDb[i];
     }
 
     public void setContentFromBundle(Bundle bundle){

@@ -1,5 +1,7 @@
 package de.schneider_simon.minigolfscores;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -26,6 +28,12 @@ public class PlayRound extends ActionBarActivity {
 
     private static boolean isPutViewsDone;
 
+    static SQLiteDatabase holeNamesDb = null;
+
+    Cursor holeNamesCursor;
+
+    String[] holeNames = new String[18];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +46,24 @@ public class PlayRound extends ActionBarActivity {
 
         gridLayout=(GridLayout)findViewById(R.id.play_round_grid);
 
+        HoleNamesDBHelper dbHelper = new HoleNamesDBHelper(this.getApplicationContext());
+
+        holeNamesDb = dbHelper.getReadableDatabase();
+
+        holeNamesCursor = setHoleNamesCursor(holeNamesDb, selectedClub);
+
+        holeNamesCursor.moveToFirst();
+
+        if(holeNamesCursor.getCount() > 0){
+            for(int i=0; i<18; i++)
+                holeNames[i] = holeNamesCursor.getString(i);
+            playRoundContent = new PlayRoundContent(gridLayout.getColumnCount(), gridLayout.getRowCount(), RESERVED_COLUMNS, holeNames);
+        }
+        else
+            playRoundContent = new PlayRoundContent(gridLayout.getColumnCount(), gridLayout.getRowCount(), RESERVED_COLUMNS);
+
         playRoundViews = new PlayRoundViews(gridLayout, selectedClub, this);
-        playRoundContent = new PlayRoundContent(gridLayout.getColumnCount(), gridLayout.getRowCount(), RESERVED_COLUMNS);
+
 
         if(bundle == null)
             playRoundContent.init();
@@ -47,6 +71,29 @@ public class PlayRound extends ActionBarActivity {
             playRoundContent.setContentFromBundle(bundle);
 
         isPutViewsDone = false;
+    }
+
+    private static Cursor setHoleNamesCursor(SQLiteDatabase holeNamesDb, String selectedClub) {
+        return holeNamesDb.query("HoleNames", new String[]{
+                "holeName1",
+                "holeName2",
+                "holeName3",
+                "holeName4",
+                "holeName5",
+                "holeName6",
+                "holeName7",
+                "holeName8",
+                "holeName9",
+                "holeName10",
+                "holeName11",
+                "holeName12",
+                "holeName13",
+                "holeName14",
+                "holeName15",
+                "holeName16",
+                "holeName17",
+                "holeName18"
+        }, "club='" + selectedClub + "'", null, null, null, null, null);
     }
 
     @Override

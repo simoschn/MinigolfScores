@@ -15,23 +15,24 @@ import android.widget.EditText;
 public class EnterHoleNames extends ActionBarActivity {
 
     String selectedClub;
-    static SQLiteDatabase db = null;
+    static SQLiteDatabase holeNamesDb = null;
     private EditText[] holeNamesEditTexts = new EditText[18];
+    Cursor holeNamesCursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_hole_names);
 
-        setTitleToSelectedClub();
-        initHoleNamesDb();
-        initSaveButton();
-        initHoleNamesEditTexts();
-    }
+        Button saveHoleNamesButton = (Button) findViewById(R.id.save_holenames_button);
+        saveHoleNamesButton.setOnClickListener(new MyOnClickListener());
 
-    private void initSaveButton() {
-        Button saveButton = (Button) findViewById(R.id.holenames_button);
-        saveButton.setOnClickListener(new MyOnClickListener());
+        setTitleToSelectedClub();
+
+        initHoleNamesDb();
+        holeNamesCursor = setHoleNamesCursor(holeNamesDb, selectedClub);
+        holeNamesCursor.moveToFirst();
+        initHoleNamesEditTexts();
     }
 
     private void initHoleNamesEditTexts() {
@@ -53,11 +54,19 @@ public class EnterHoleNames extends ActionBarActivity {
         holeNamesEditTexts[15] = (EditText) findViewById(R.id.hole16_textView);
         holeNamesEditTexts[16] = (EditText) findViewById(R.id.hole17_textView);
         holeNamesEditTexts[17] = (EditText) findViewById(R.id.hole18_textView);
+
+        if(holeNamesCursor.getCount() > 0)
+            initHoleNamesEditTextsContents();
+    }
+
+    private void initHoleNamesEditTextsContents() {
+        for(int i=0; i<18; i++)
+            holeNamesEditTexts[i].setText(holeNamesCursor.getString(i));
     }
 
     private void initHoleNamesDb() {
         HoleNamesDBHelper dbHelper = new HoleNamesDBHelper(getApplicationContext());
-        db = dbHelper.getWritableDatabase();
+        holeNamesDb = dbHelper.getWritableDatabase();
     }
 
     private void setTitleToSelectedClub() {
@@ -65,6 +74,28 @@ public class EnterHoleNames extends ActionBarActivity {
         setTitle(selectedClub);
     }
 
+    private static Cursor setHoleNamesCursor(SQLiteDatabase holeNamesDb, String selectedClub) {
+        return holeNamesDb.query("HoleNames", new String[]{
+                "holeName1",
+                "holeName2",
+                "holeName3",
+                "holeName4",
+                "holeName5",
+                "holeName6",
+                "holeName7",
+                "holeName8",
+                "holeName9",
+                "holeName10",
+                "holeName11",
+                "holeName12",
+                "holeName13",
+                "holeName14",
+                "holeName15",
+                "holeName16",
+                "holeName17",
+                "holeName18"
+        }, "club='" + selectedClub + "'", null, null, null, null, null);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -114,12 +145,12 @@ public class EnterHoleNames extends ActionBarActivity {
             values.put("holeName17", holeNamesEditTexts[16].getText().toString());
             values.put("holeName18", holeNamesEditTexts[17].getText().toString());
 
-            Cursor clubCounter = db.query("HoleNames", new String[]{"club"}, "club='" + selectedClub + "'", null, null, null, null, null);
+            Cursor clubCounter = holeNamesDb.query("HoleNames", new String[]{"club"}, "club='" + selectedClub + "'", null, null, null, null, null);
 
             if(clubCounter.getCount() == 0)
-                db.insert("HoleNames", null, values);
+                holeNamesDb.insert("HoleNames", null, values);
             else
-                db.update("HoleNames", values, "club='"+ selectedClub +"'", null);
+                holeNamesDb.update("HoleNames", values, "club='"+ selectedClub +"'", null);
         }
     }
 }
