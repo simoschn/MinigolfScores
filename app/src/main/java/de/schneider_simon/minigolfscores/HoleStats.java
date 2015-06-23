@@ -27,7 +27,7 @@ public class HoleStats {
     }
 
     public String toString(){
-        return String.format("%-3d %-25s %.2f %.0f%%",runningNumber, name, average, acePercentage);
+        return String.format("%-3d %-18s %.2f %.0f%%",runningNumber, name, average, acePercentage);
     }
 
     public int getRunningNumber() {

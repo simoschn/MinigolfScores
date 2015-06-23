@@ -29,7 +29,7 @@ public class Statistics extends ActionBarActivity {
         setContentView(R.layout.activity_statistics);
 
         selectedClub = getIntent().getStringExtra("club");
-        setTitle(R.string.title_activity_statistics);
+        setTitle(selectedClub);
 
         initSelectStatsSpinner();
 
@@ -74,7 +74,8 @@ public class Statistics extends ActionBarActivity {
 
     private void displayAverageAndAcePercentagePerHole(boolean sorted) {
 
-        String buffer = StatsStringMaker.averageAndAcePercentagePerHole(roundsDb, holeNamesDb, selectedClub, sorted);
+        String buffer = getString(R.string.rounds_total) + " " + StatsStringMaker.totalNumberOfRoundsAtSelectedClub(roundsDb, selectedClub) + "\n";
+        buffer += StatsStringMaker.averageAndAcePercentagePerHole(roundsDb, holeNamesDb, selectedClub, sorted);
         writeBufferToStatsTextView(buffer);
     }
 
