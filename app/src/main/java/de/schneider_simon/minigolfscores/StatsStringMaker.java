@@ -7,11 +7,80 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Vector;
 
 public class StatsStringMaker {
 
     private static String FORMAT = "dd.MM.yyyy";
-    private static String TAG = "StatsStringMaker: ";
+    private final static String TAG = "StatsStringMaker: ";
+
+    public static String averageAndAcePercentagePerHole(SQLiteDatabase roundsDb, SQLiteDatabase holeNamesDb, String clubName, boolean sorted){
+
+        String buffer = "";
+        Vector<HoleStats> holesStats = getHoleStatsVector(roundsDb, holeNamesDb, clubName, sorted);
+
+        for(HoleStats holeStats : holesStats) {
+            buffer += (holeStats.toString() + newline());
+        }
+
+        return buffer;
+    }
+
+    private static Vector<HoleStats> getHoleStatsVector(SQLiteDatabase roundsDb, SQLiteDatabase holeNamesDb, String clubName, boolean sorted){
+        HoleStatsVector holesStats = new HoleStatsVector();
+        Cursor holeNamesCursor = HoleNamesDB.setHoleNamesCursor(holeNamesDb, clubName);
+        Cursor roundsCursor = setRoundsCursor(roundsDb, clubName);
+
+        holeNamesCursor.moveToFirst();
+
+        for(int i=0; i<18; i++){
+            HoleStats element = new HoleStats();
+            element.setRunningNumber(i+1);
+
+            if(holeNamesCursor.isAfterLast())
+                element.setName("Bahn " + (i+1));
+            else
+                element.setName(holeNamesCursor.getString(i));
+
+            element.setAcePercentage(calculateAcePercentage(roundsCursor, i));
+            element.setAverage(calculateAverage(roundsCursor, i));
+            holesStats.add(element);
+
+        }
+
+        if(sorted)
+            holesStats.sort();
+
+        return holesStats.getVector();
+    }
+
+    private static double calculateAcePercentage(Cursor roundsCursor, int holeIndex){
+        roundsCursor.moveToFirst();
+        double aces=0.0;
+
+        do{
+            if(roundsCursor.getInt(holeIndex+1)==1)
+                aces++;
+           roundsCursor.moveToNext();
+        }while(!roundsCursor.isAfterLast());
+
+        if(aces>0)
+            return (aces/roundsCursor.getCount())*100;
+        else
+            return 0.0;
+    }
+
+    private static double calculateAverage(Cursor roundsCursor, int holeIndex){
+        roundsCursor.moveToFirst();
+        double sumShots = 0.0;
+
+        do{
+            sumShots += roundsCursor.getInt(holeIndex+1);
+            roundsCursor.moveToNext();
+        }while(!roundsCursor.isAfterLast());
+
+        return sumShots/roundsCursor.getCount();
+    }
 
     public static String lastTrainingAtSelectedClub(SQLiteDatabase roundsDb, String selectedClub) {
 

@@ -15,10 +15,13 @@ import android.widget.TextView;
 
 public class Statistics extends ActionBarActivity {
 
+    private static final String TAG = "Statistics";
+
     String selectedClub;
     Spinner selectStatsSpinner;
 
     static SQLiteDatabase roundsDb = null;
+    static SQLiteDatabase holeNamesDb = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +33,11 @@ public class Statistics extends ActionBarActivity {
 
         initSelectStatsSpinner();
 
-        RoundsDBHelper dbHelper = new RoundsDBHelper(this.getApplicationContext());
+        RoundsDBHelper roundsDbHelper = new RoundsDBHelper(this.getApplicationContext());
+        roundsDb = roundsDbHelper.getReadableDatabase();
 
-        roundsDb = dbHelper.getReadableDatabase();
+        HoleNamesDBHelper holeNamesDbHelper = new HoleNamesDBHelper(this.getApplicationContext());
+        holeNamesDb = holeNamesDbHelper.getReadableDatabase();
     }
 
     private void initSelectStatsSpinner() {
@@ -46,7 +51,18 @@ public class Statistics extends ActionBarActivity {
         selectStatsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                displayAllRoundsAtSelectedClub();
+
+                switch(position){
+                    case 0:
+                        displayAllRoundsAtSelectedClub();
+                        break;
+                    case 1:
+                        displayAverageAndAcePercentagePerHole(false);
+                        break;
+                    case 2:
+                        displayAverageAndAcePercentagePerHole(true);
+                        break;
+                }
             }
 
             @Override
@@ -54,6 +70,12 @@ public class Statistics extends ActionBarActivity {
 
             }
         });
+    }
+
+    private void displayAverageAndAcePercentagePerHole(boolean sorted) {
+
+        String buffer = StatsStringMaker.averageAndAcePercentagePerHole(roundsDb, holeNamesDb, selectedClub, sorted);
+        writeBufferToStatsTextView(buffer);
     }
 
     private void displayAllRoundsAtSelectedClub() {
@@ -65,6 +87,10 @@ public class Statistics extends ActionBarActivity {
 
         buffer += StatsStringMaker.allRoundsAtSelectedClub(roundsDb, selectedClub);
 
+        writeBufferToStatsTextView(buffer);
+    }
+
+    private void writeBufferToStatsTextView(String buffer) {
         TextView statsTextView = (TextView)findViewById(R.id.stats_text_view);
         statsTextView.setText(buffer);
     }

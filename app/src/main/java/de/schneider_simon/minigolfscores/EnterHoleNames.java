@@ -30,7 +30,7 @@ public class EnterHoleNames extends ActionBarActivity {
         setTitleToSelectedClub();
 
         initHoleNamesDb();
-        holeNamesCursor = setHoleNamesCursor(holeNamesDb, selectedClub);
+        holeNamesCursor = HoleNamesDB.setHoleNamesCursor(holeNamesDb, selectedClub);
         holeNamesCursor.moveToFirst();
         initHoleNamesEditTexts();
     }
@@ -72,29 +72,6 @@ public class EnterHoleNames extends ActionBarActivity {
     private void setTitleToSelectedClub() {
         selectedClub = getIntent().getStringExtra("club");
         setTitle(selectedClub);
-    }
-
-    private static Cursor setHoleNamesCursor(SQLiteDatabase holeNamesDb, String selectedClub) {
-        return holeNamesDb.query("HoleNames", new String[]{
-                "holeName1",
-                "holeName2",
-                "holeName3",
-                "holeName4",
-                "holeName5",
-                "holeName6",
-                "holeName7",
-                "holeName8",
-                "holeName9",
-                "holeName10",
-                "holeName11",
-                "holeName12",
-                "holeName13",
-                "holeName14",
-                "holeName15",
-                "holeName16",
-                "holeName17",
-                "holeName18"
-        }, "club='" + selectedClub + "'", null, null, null, null, null);
     }
 
     @Override
