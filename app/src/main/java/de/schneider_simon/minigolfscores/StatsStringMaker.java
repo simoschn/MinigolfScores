@@ -2,6 +2,7 @@ package de.schneider_simon.minigolfscores;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,63 +16,38 @@ public class StatsStringMaker {
     public static String lastTrainingAtSelectedClub(SQLiteDatabase roundsDb, String selectedClub) {
 
         String statsString;
-        String mostRecentDate;
-        ArrayList<Integer> roundsList;
-        ArrayList<Integer> totalsList;
-
         Cursor roundsCursor = setRoundsCursor(roundsDb, selectedClub);
 
         if(isNoRoundPlayedYet(roundsCursor))
             return "";
 
         roundsCursor.moveToFirst();
-        mostRecentDate = extractDateStringFromDatetimeAtCursor(roundsCursor);
-        statsString = mostRecentDate + newline() + newline();
-
-        roundsList = getRoundsListAtDateFromCursor(mostRecentDate, roundsCursor);
-        totalsList = getTotalsListFromRoundsList(roundsList);
-
-        statsString += makeScoresStringFromScoresList(roundsList) + newline();
-        statsString += makeScoresStringFromScoresList(totalsList) + newline() + newline();
-        statsString += makeAverageStringFromScoresList(roundsList);
+        statsString = makeStatsStringForOneDate(roundsCursor);
 
         return statsString;
     }
 
     public static String allRoundsAtSelectedClub(SQLiteDatabase roundsDb, String selectedClub){
-        String statsString = "";
 
-        String currentDate;
-        ArrayList<Integer> roundsList;
-        ArrayList<Integer> totalsList;
-
+        String statsString="";
         Cursor roundsCursor = setRoundsCursor(roundsDb, selectedClub);
 
         if(isNoRoundPlayedYet(roundsCursor))
             return "";
 
         roundsCursor.moveToFirst();
-        while(!roundsCursor.isAfterLast()){
-            currentDate = extractDateStringFromDatetimeAtCursor(roundsCursor);
-            statsString += currentDate + newline() + newline();
+        while(!roundsCursor.isAfterLast())
+            statsString += (makeStatsStringForOneDate(roundsCursor) +newline() + newline());
 
-            roundsList = getRoundsListAtDateFromCursor(currentDate, roundsCursor);
-            totalsList = getTotalsListFromRoundsList(roundsList);
-
-            statsString += makeScoresStringFromScoresList(roundsList) + newline();
-            statsString += makeScoresStringFromScoresList(totalsList) + newline() + newline();
-            statsString += makeAverageStringFromScoresList(roundsList)+ newline() + newline();
-        }
         return statsString;
     }
 
     public static String roundsAverageAtSelectedClub(SQLiteDatabase roundsDb, String selectedClub){
         Double sumOfAllRounds = 0.0;
         Integer numberOfRounds = 0;
-        Double average;
-        String averageString;
         ArrayList<Integer> allRoundsList;
         Cursor roundsCursor = setRoundsCursor(roundsDb, selectedClub);
+
         if(isNoRoundPlayedYet(roundsCursor))
             return "";
 
@@ -83,11 +59,7 @@ public class StatsStringMaker {
             numberOfRounds++;
         }
 
-        average = sumOfAllRounds/numberOfRounds;
-
-        averageString = String.format("%.2f", average);
-
-        return averageString.toString();
+        return String.format("%.2f", sumOfAllRounds/numberOfRounds);
     }
 
     public static String totalNumberOfRoundsAtSelectedClub(SQLiteDatabase roundsDb, String selectedClub){
@@ -102,27 +74,31 @@ public class StatsStringMaker {
         return ((Integer)allRoundsList.size()).toString();
     }
 
-    private static ArrayList<Integer> getRoundsListAtDateFromCursor(String mostRecentDate, Cursor roundsCursor){
-        Integer roundScore;
-        ArrayList<Integer> roundsList = new ArrayList<>();
+    private static String makeStatsStringForOneDate(Cursor roundsCursor) {
+        String date = extractDateStringFromDatetimeAtCursor(roundsCursor);
+        ArrayList<Integer> roundsList = getRoundsListFromCursor(roundsCursor, date);
+        ArrayList<Integer> totalsList = getTotalsListFromRoundsList(roundsList);
+        String statsString = date + newline() + newline();
 
-        do {
-            roundScore = calculateRoundScoreAtCursor(roundsCursor);
-            roundsList.add(0, roundScore);
-        } while(isAnotherRoundWithSameDate(mostRecentDate, roundsCursor));
-
-        return roundsList;
+        statsString += makeScoresStringFromScoresList(roundsList) + newline();
+        statsString += makeScoresStringFromScoresList(totalsList) + newline() + newline();
+        statsString += makeAverageStringFromScoresList(roundsList);
+        return statsString;
     }
 
-    private static ArrayList<Integer> getRoundsListFromCursor(Cursor roundsCursor){
-        Integer roundScore;
+    private static ArrayList<Integer> getRoundsListFromCursor(Cursor roundsCursor, String ... date){
         ArrayList<Integer> roundsList = new ArrayList<>();
+        boolean breakCondition;
 
         do {
-            roundScore = calculateRoundScoreAtCursor(roundsCursor);
-            roundsList.add(0, roundScore);
+            roundsList.add(0, calculateRoundScoreAtCursor(roundsCursor));
             roundsCursor.moveToNext();
-        } while(!roundsCursor.isAfterLast());
+
+            if(date.length==0)
+                breakCondition = !roundsCursor.isAfterLast();
+            else
+                breakCondition = isAnotherRoundWithSameDate(date[0], roundsCursor);
+        } while(breakCondition);
 
         return roundsList;
     }
@@ -196,8 +172,11 @@ public class StatsStringMaker {
         return roundScore;
     }
 
-    private static boolean isAnotherRoundWithSameDate(String mostRecentDate, Cursor roundsCursor) {
-        return roundsCursor.moveToNext() && extractDateStringFromDatetimeAtCursor(roundsCursor).equals(mostRecentDate);
+    private static boolean isAnotherRoundWithSameDate(String date, Cursor roundsCursor) {
+        if(roundsCursor.isAfterLast())
+            return false;
+        else
+            return extractDateStringFromDatetimeAtCursor(roundsCursor).equals(date);
     }
 
     private static boolean isNoRoundPlayedYet(Cursor roundsCursor) {

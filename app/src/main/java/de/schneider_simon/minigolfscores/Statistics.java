@@ -46,16 +46,7 @@ public class Statistics extends ActionBarActivity {
         selectStatsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String buffer ="";
-                buffer += getString(R.string.all_rounds) + " " + selectedClub + "\n";
-
-                buffer += getString(R.string.rounds_total) + " " + StatsStringMaker.totalNumberOfRoundsAtSelectedClub(roundsDb, selectedClub) + "\n";
-                buffer += getString(R.string.average_total) + " " + StatsStringMaker.roundsAverageAtSelectedClub(roundsDb, selectedClub) + "\n\n";
-
-                buffer += StatsStringMaker.allRoundsAtSelectedClub(roundsDb, selectedClub);
-
-                TextView statsTextView = (TextView)findViewById(R.id.stats_text_view);
-                statsTextView.setText(buffer);
+                displayAllRoundsAtSelectedClub();
             }
 
             @Override
@@ -63,6 +54,19 @@ public class Statistics extends ActionBarActivity {
 
             }
         });
+    }
+
+    private void displayAllRoundsAtSelectedClub() {
+        String buffer ="";
+        buffer += getString(R.string.all_rounds) + " " + selectedClub + "\n";
+
+        buffer += getString(R.string.rounds_total) + " " + StatsStringMaker.totalNumberOfRoundsAtSelectedClub(roundsDb, selectedClub) + "\n";
+        buffer += getString(R.string.average_total) + " " + StatsStringMaker.roundsAverageAtSelectedClub(roundsDb, selectedClub) + "\n\n";
+
+        buffer += StatsStringMaker.allRoundsAtSelectedClub(roundsDb, selectedClub);
+
+        TextView statsTextView = (TextView)findViewById(R.id.stats_text_view);
+        statsTextView.setText(buffer);
     }
 
 

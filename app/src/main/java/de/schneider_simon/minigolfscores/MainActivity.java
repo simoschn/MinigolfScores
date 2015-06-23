@@ -58,8 +58,6 @@ public class MainActivity extends ActionBarActivity {
 
                 displaySelectedCourseDetails();
 
-                Log.d(TAG, selectedClub);
-
                 buffer = StatsStringMaker.lastTrainingAtSelectedClub(roundsDb, selectedClub);
 
                 TextView lastTrainingText = (TextView)findViewById(R.id.text_view_last_training);
