@@ -198,7 +198,7 @@ public class StatsStringMaker {
             buffer += String.format("%-15s", holeNamesList.get(hole));
 
             for (Round round : detailedRoundsList) {
-                buffer += String.format("%5d", round.getHole(hole));
+                buffer += String.format("%4d", round.getHole(hole));
             }
 
             buffer += newline();
@@ -295,7 +295,12 @@ public class StatsStringMaker {
             holeNamesCursor.moveToFirst();
 
             for(int i=0; i<18; i++){
-                holeNames.add(holeNamesCursor.getString(i));
+                String holeName = holeNamesCursor.getString(i);
+
+                if(holeName.length() > 15)
+                    holeNames.add(holeName.substring(0, 15));
+                else
+                    holeNames.add(holeName);
             }
         }
 
@@ -304,16 +309,10 @@ public class StatsStringMaker {
 
     private static String makeScoresString(ArrayList<Integer> scoresList) {
         String scoresString = "";
-        boolean isFirst = true;
 
-        for(Integer round : scoresList){
-            if(isFirst) {
-                scoresString += round.toString();
-                isFirst = false;
-            }
-            else
-                scoresString += String.format("%5d", round);
-        }
+        for(Integer round : scoresList)
+                scoresString += String.format("%4d", round);
+
         return scoresString;
     }
 
@@ -360,7 +359,7 @@ public class StatsStringMaker {
     }
 
     private static String separator(){
-         return"\n\n__________________________________________________\n";
+         return"\n\n________________________________\n";
     }
 
     private static String placeholder(){
