@@ -75,7 +75,7 @@ public class Statistics extends ActionBarActivity {
                         break;
                 }
                 writeBufferToStatsTextView(buffer);
-            }
+            }y
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
