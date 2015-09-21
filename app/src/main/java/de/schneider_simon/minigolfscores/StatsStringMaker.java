@@ -326,6 +326,8 @@ public class StatsStringMaker {
         return String.format("%.2f", totalScore / scoresList.size());
     }
 
+
+
     private static Integer calculateRoundScoreAtCursor(Cursor roundsCursor) {
         Integer roundScore;
         roundScore = 0;
