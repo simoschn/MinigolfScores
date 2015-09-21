@@ -24,8 +24,6 @@ public class PlayRound extends ActionBarActivity {
 
     String selectedClub;
 
-    private static Bundle bundle;
-
     private static boolean isPutViewsDone;
 
     static SQLiteDatabase holeNamesDb = null;
@@ -40,7 +38,7 @@ public class PlayRound extends ActionBarActivity {
 
         setContentView(R.layout.activity_play_round);
 
-        bundle = savedInstanceState;
+        Bundle bundle = savedInstanceState;
 
         selectedClub = getIntent().getStringExtra("club");
 

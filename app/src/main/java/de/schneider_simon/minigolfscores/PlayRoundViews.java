@@ -76,7 +76,7 @@ public class PlayRoundViews {
                 holeScores[yPos].setOnLongClickListener(new HoleScoreOnLongClickListener(yPos));
             }
 
-            if(yPos == INDEX_SAVE_BUTTON){
+            if(yPos.equals(INDEX_SAVE_BUTTON)){
                 holeScores[yPos].setOnClickListener(new SaveRoundOnClickListener());
                 holeScores[yPos].setTextColor(Color.argb(255, 0, 255, 0));
                 holeScores[yPos].setBackgroundColor(Color.argb(255, 0, 0, 0));

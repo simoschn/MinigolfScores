@@ -3,7 +3,8 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
+    android:background="#fffffbbc">
 
     <LinearLayout
         android:orientation="vertical"
@@ -83,25 +84,37 @@
             android:layout_height="wrap_content"
             android:text="@string/play_round"
             android:id="@+id/play_round_button"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:background="#ff82e0ff"
+            android:textColor="#ffffffff"
+            style="@android:style/Holo.Light.SegmentedButton" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/stats"
-            android:id="@+id/stats_button" />
+            android:id="@+id/stats_button"
+            android:textColor="#ffffffff"
+            android:background="#ff82e0ff"
+            style="@android:style/Holo.Light.SegmentedButton" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/holenames"
-            android:id="@+id/holenames_button" />
+            android:id="@+id/holenames_button"
+            android:textColor="#ffffffff"
+            android:background="#ff82e0ff"
+            style="@android:style/Holo.Light.SegmentedButton" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/create_course"
-            android:id="@+id/new_course_button" />
+            android:id="@+id/new_course_button"
+            android:textColor="#ffffffff"
+            android:background="#ff82e0ff"
+            style="@android:style/Holo.Light.SegmentedButton" />
     </LinearLayout>
 
 </RelativeLayout>

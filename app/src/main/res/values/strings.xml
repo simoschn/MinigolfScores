@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MinigolfScores</string>
+    <string name="app_name">Minigolf Scores</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -55,6 +55,7 @@
 
     <string-array name="select_stats">
         <item>Alle Runden</item>
+        <item>Alle Runden Detail</item>
         <item>Bahnen Durchschnitte</item>
         <item>Bahnen Durchschnitte sortiert</item>
     </string-array>

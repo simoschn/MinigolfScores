@@ -3,8 +3,11 @@ package de.schneider_simon.minigolfscores;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,7 +66,6 @@ public class MainActivity extends ActionBarActivity {
                 TextView lastTrainingText = (TextView)findViewById(R.id.text_view_last_training);
 
                 lastTrainingText.setText(getString(R.string.last_training) + "\n" + buffer);
-
             }
 
             @Override
@@ -248,5 +250,12 @@ public class MainActivity extends ActionBarActivity {
             holeNames.putExtra("club", selectedClub);
             startActivity(holeNames);
         }
+    }
+    private static SpannableStringBuilder separator() {
+        SpannableStringBuilder sb = new SpannableStringBuilder("\n\n-------------------------------------------\n");
+
+        sb.setSpan(new ForegroundColorSpan(Color.RED), 0, sb.length(), 0);
+
+        return sb;
     }
 }

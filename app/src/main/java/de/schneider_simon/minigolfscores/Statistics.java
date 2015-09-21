@@ -1,9 +1,13 @@
 package de.schneider_simon.minigolfscores;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,17 +56,23 @@ public class Statistics extends ActionBarActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                SpannableString buffer = new SpannableString("");
+
                 switch(position){
                     case 0:
-                        displayAllRoundsAtSelectedClub();
+                        buffer = new SpannableString(TextUtils.concat(makeHeaderString(), StatsStringMaker.allRounds(roundsDb, selectedClub)));
                         break;
                     case 1:
-                        displayAverageAndAcePercentagePerHole(false);
+                        buffer = new SpannableString(TextUtils.concat(makeHeaderString(), StatsStringMaker.allRoundsDetail(roundsDb, holeNamesDb, selectedClub)));
                         break;
                     case 2:
-                        displayAverageAndAcePercentagePerHole(true);
+                        buffer = StatsStringMaker.averageAndAcePercentagePerHole(roundsDb, holeNamesDb, selectedClub, false);
+                        break;
+                    case 3:
+                        buffer = StatsStringMaker.averageAndAcePercentagePerHole(roundsDb, holeNamesDb, selectedClub, true);
                         break;
                 }
+                writeBufferToStatsTextView(buffer);
             }
 
             @Override
@@ -72,29 +82,22 @@ public class Statistics extends ActionBarActivity {
         });
     }
 
-    private void displayAverageAndAcePercentagePerHole(boolean sorted) {
-
-        String buffer = StatsStringMaker.averageAndAcePercentagePerHole(roundsDb, holeNamesDb, selectedClub, sorted);
-        writeBufferToStatsTextView(buffer);
-    }
-
-    private void displayAllRoundsAtSelectedClub() {
-        String buffer ="";
-        buffer += getString(R.string.all_rounds) + " " + selectedClub + "\n";
-
-        buffer += getString(R.string.rounds_total) + " " + StatsStringMaker.totalNumberOfRoundsAtSelectedClub(roundsDb, selectedClub) + "\n";
-        buffer += getString(R.string.average_total) + " " + StatsStringMaker.roundsAverageAtSelectedClub(roundsDb, selectedClub) + "\n\n";
-
-        buffer += StatsStringMaker.allRoundsAtSelectedClub(roundsDb, selectedClub);
-
-        writeBufferToStatsTextView(buffer);
-    }
-
-    private void writeBufferToStatsTextView(String buffer) {
+    private void writeBufferToStatsTextView(SpannableString buffer) {
         TextView statsTextView = (TextView)findViewById(R.id.stats_text_view);
         statsTextView.setText(buffer);
     }
 
+    private SpannableString makeHeaderString() {
+        return new SpannableString(getString(R.string.all_rounds)
+                                + " "
+                                + selectedClub + "\n"
+                                + getString(R.string.rounds_total)
+                                + " "
+                                + StatsStringMaker.totalNumberOfRounds(roundsDb, selectedClub) + "\n"
+                                + getString(R.string.average_total)
+                                + " "
+                                + StatsStringMaker.roundsAverage(roundsDb, selectedClub) + "\n\n");
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
