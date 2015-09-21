@@ -31,6 +31,8 @@ public class MainActivity extends ActionBarActivity {
     String selectedClub = "";
 
     static SQLiteDatabase roundsDb = null;
+    static SQLiteDatabase courseDb = null;
+    static SQLiteDatabase holeNamesDb = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +40,21 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        RoundsDBHelper roundsDbHelper = new RoundsDBHelper(this.getApplicationContext());
+        roundsDb = roundsDbHelper.getReadableDatabase();
+
+        CourseDBHelper courseDbHelper = new CourseDBHelper(this.getApplicationContext());
+        courseDb = courseDbHelper.getReadableDatabase();
+
+        HoleNamesDBHelper holeNamesDbHelper = new HoleNamesDBHelper(this.getApplicationContext());
+        holeNamesDb = holeNamesDbHelper.getReadableDatabase();
+
         initNewCourseButton();
         initPlayRoundButton();
         initStatsButton();
         initHoleNamesButton();
 
         initSelectClubSpinner();
-
-        RoundsDBHelper dbHelper = new RoundsDBHelper(this.getApplicationContext());
-
-        roundsDb = dbHelper.getReadableDatabase();
     }
 
     private void initSelectClubSpinner() {
@@ -150,11 +157,15 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(id){
+            case R.id.action_settings:
+                return true;
+            case R.id.action_export:
+                FileExporter.export(courseDb, holeNamesDb, roundsDb);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void fillSpinnerFromCourseDb() {
@@ -184,32 +195,16 @@ public class MainActivity extends ActionBarActivity {
 
     private void initCursorForClubSpinner() {
 
-        SQLiteDatabase courseDb;
-
-        CourseDBHelper courseDbHelper = new CourseDBHelper(getApplicationContext());
-
-        courseDb = courseDbHelper.getReadableDatabase();
-
         cursorForClubSpinner = courseDb.query("Courses", new String[] {"_id", "club"}, null, null, null, null, null);
 
         cursorForClubSpinner.moveToFirst();
-
-        courseDb.close();
     }
 
     private void initCursorForClubDisplay() {
 
-        SQLiteDatabase courseDb;
-
-        CourseDBHelper courseDbHelper = new CourseDBHelper(getApplicationContext());
-
-        courseDb = courseDbHelper.getReadableDatabase();
-
         cursorForClubDisplay = courseDb.query("Courses", new String[] {"club", "system", "street", "street_number", "zipcode", "city"}, null, null, null, null, null);
 
         cursorForClubDisplay.moveToFirst();
-
-        courseDb.close();
     }
 
     class MyNewCourseOnClickListener implements OnClickListener {

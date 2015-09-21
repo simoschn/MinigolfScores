@@ -182,10 +182,10 @@ public class StatsStringMaker {
         return extractDateString(roundsCursor)
                 + newline() + newline()
                 + makeDetailedRoundsString(detailedRoundsList, holeNamesList)
-                + placeholder()
+//                + placeholder()
                 + makeScoresString(roundsList)
                 + newline()
-                + placeholder()
+//                + placeholder()
                 + makeScoresString(totalsList)
                 + newline() + newline()
                 + makeAverageString(roundsList)
@@ -198,7 +198,7 @@ public class StatsStringMaker {
             buffer += String.format("%-15s", holeNamesList.get(hole));
 
             for (Round round : detailedRoundsList) {
-                buffer += String.format("%4d", round.getHole(hole));
+                buffer += String.format("%d", round.getHole(hole));
             }
 
             buffer += newline();
