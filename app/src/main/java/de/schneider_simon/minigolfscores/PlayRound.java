@@ -38,6 +38,8 @@ public class PlayRound extends ActionBarActivity {
 
         setContentView(R.layout.activity_play_round);
 
+        String saveRoundConfirm = getString(R.string.save_round_confirm);
+
         Bundle bundle = savedInstanceState;
 
         selectedClub = getIntent().getStringExtra("club");
@@ -60,7 +62,7 @@ public class PlayRound extends ActionBarActivity {
         else
             playRoundContent = new PlayRoundContent(gridLayout.getColumnCount(), gridLayout.getRowCount(), RESERVED_COLUMNS);
 
-        playRoundViews = new PlayRoundViews(gridLayout, selectedClub, this);
+        playRoundViews = new PlayRoundViews(gridLayout, selectedClub, saveRoundConfirm, this);
 
 
         if(bundle == null)

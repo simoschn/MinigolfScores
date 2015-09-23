@@ -1,5 +1,7 @@
 package de.schneider_simon.minigolfscores;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,7 +10,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,9 +46,6 @@ public class MainActivity extends ActionBarActivity {
 
         CourseDBHelper courseDbHelper = new CourseDBHelper(this.getApplicationContext());
         courseDb = courseDbHelper.getReadableDatabase();
-
-        HoleNamesDBHelper holeNamesDbHelper = new HoleNamesDBHelper(this.getApplicationContext());
-        holeNamesDb = holeNamesDbHelper.getReadableDatabase();
 
         initNewCourseButton();
         initPlayRoundButton();
@@ -155,13 +153,31 @@ public class MainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        HoleNamesDBHelper holeNamesDbHelper;
 
         //noinspection SimplifiableIfStatement
         switch(id){
             case R.id.action_settings:
                 return true;
             case R.id.action_export:
-                FileExporter.export(courseDb, holeNamesDb, roundsDb);
+                holeNamesDbHelper = new HoleNamesDBHelper(this.getApplicationContext());
+                holeNamesDb = holeNamesDbHelper.getReadableDatabase();
+                FileExporter.exportData(courseDb, holeNamesDb, roundsDb);
+                holeNamesDb.close();
+                return true;
+            case R.id.action_import:
+                holeNamesDbHelper = new HoleNamesDBHelper(this.getApplicationContext());
+                holeNamesDb = holeNamesDbHelper.getReadableDatabase();
+                raiseImportAlertDialog();
+                return true;
+            case R.id.action_delete:
+//                ONLY TO TEST IMPORT FUNCTIONS
+//                courseDb.delete("Courses", null, null);
+//                holeNamesDbHelper = new HoleNamesDBHelper(this.getApplicationContext());
+//                holeNamesDb = holeNamesDbHelper.getReadableDatabase();
+//                holeNamesDb.delete("HoleNames", null, null);
+//                holeNamesDb.close();
+//                roundsDb.delete("Rounds", null, null);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -246,6 +262,30 @@ public class MainActivity extends ActionBarActivity {
             startActivity(holeNames);
         }
     }
+
+    private void raiseImportAlertDialog(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        alertDialogBuilder.setTitle(getString(R.string.import_alert_title));
+
+        alertDialogBuilder
+                .setMessage(getString(R.string.import_message))
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.import_ok),new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        FileImporter.importData(courseDb, holeNamesDb, roundsDb);
+                    }
+                })
+                .setNegativeButton(getString(R.string.import_cancel),new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
     private static SpannableStringBuilder separator() {
         SpannableStringBuilder sb = new SpannableStringBuilder("\n\n-------------------------------------------\n");
 

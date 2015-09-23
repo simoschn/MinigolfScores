@@ -68,7 +68,7 @@ public class PlayRoundContent {
             for(int i=0; i < numberOfRows-2; i++)
                 holeNames[i] = "Bahn " + (i+1);
         else
-            System.arraycopy(holeNames, 0, holeNamesFromDb, 0, holeNames.length);
+            System.arraycopy(holeNamesFromDb, 0, holeNames, 0, holeNamesFromDb.length);
     }
 
     public void setContentFromBundle(Bundle bundle){

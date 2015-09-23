@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PlayRoundViews {
 
@@ -33,8 +34,14 @@ public class PlayRoundViews {
     private static Integer numberOfRows;
 
     private static String selectedClub;
+    private static String saveRoundConfirm;
 
-    PlayRoundViews(GridLayout grid, String club, Context context) {
+    private static Context context;
+
+    PlayRoundViews(GridLayout grid, String club, String saveRoundConfirm, Context context) {
+
+        this.context = context;
+        this.saveRoundConfirm = saveRoundConfirm;
         gridLayout = grid;
         selectedClub = club;
 
@@ -171,7 +178,13 @@ public class PlayRoundViews {
             playedRoundsIndex = searchFreePlayedRoundsColumnOrShiftLeft(playedRoundsIndex);
             writePlayedRound(playedRoundsIndex);
             resetHoleScores();
+            confirmSave();
         }
+    }
+
+    private void confirmSave(){
+        Toast toast = Toast.makeText(context.getApplicationContext(), saveRoundConfirm, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     private void resetHoleScores() {

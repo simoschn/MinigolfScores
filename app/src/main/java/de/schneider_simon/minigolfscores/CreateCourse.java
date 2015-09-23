@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class CreateCourse extends ActionBarActivity {
 
@@ -59,8 +60,6 @@ public class CreateCourse extends ActionBarActivity {
                 @Override
                 public void afterTextChanged(Editable s) {
                     course.setCity(s.toString());
-
-                    LogCourse();
                 }
             };
     }
@@ -82,8 +81,6 @@ public class CreateCourse extends ActionBarActivity {
                 @Override
                 public void afterTextChanged(Editable s) {
                     course.setZipcode(s.toString());
-
-                    LogCourse();
                 }
             };
     }
@@ -105,8 +102,6 @@ public class CreateCourse extends ActionBarActivity {
                 @Override
                 public void afterTextChanged(Editable s) {
                     course.setStreetNumber(s.toString());
-
-                    LogCourse();
                 }
             };
     }
@@ -128,8 +123,6 @@ public class CreateCourse extends ActionBarActivity {
                 @Override
                 public void afterTextChanged(Editable s) {
                     course.setStreet(s.toString());
-
-                    LogCourse();
                 }
             };
     }
@@ -151,8 +144,6 @@ public class CreateCourse extends ActionBarActivity {
                 @Override
                 public void afterTextChanged(Editable s) {
                     course.setSystem(s.toString());
-
-                    LogCourse();
                 }
             };
     }
@@ -175,8 +166,6 @@ public class CreateCourse extends ActionBarActivity {
                 public void afterTextChanged(Editable s) {
 
                     course.setClub(s.toString());
-
-                    LogCourse();
                 }
             };
     }
@@ -232,6 +221,12 @@ public class CreateCourse extends ActionBarActivity {
             else
                 db.update("Courses", values, "club='"+course.getClub()+"'", null);
 
+            confirmCourseSave();
         }
+    }
+
+    private void confirmCourseSave(){
+        Toast toast = Toast.makeText(this.getApplicationContext(), getString(R.string.save_course_confirm), Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

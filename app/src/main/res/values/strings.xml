@@ -4,6 +4,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_export">Export</string>
+    <string name="action_import">Import</string>
+    <string name="action_delete">Löschen</string>
 
     <string name="create_course">Neuen Platz anlegen...</string>
     <string name="show_course_details">Platz anzeigen...</string>
@@ -12,6 +14,10 @@
     <string name="stats">Statistiken...</string>
     <string name="holenames">Bahnen eingeben...</string>
     <string name="save_holenames">Bahnen speichern</string>
+
+    <string name="save_round_confirm">Runde gespeichert</string>
+    <string name="save_course_confirm">Platz gespeichert</string>
+    <string name="save_hole_names_confirm">Bahnen gespeichert</string>
 
     <string name="last_training_hint">Letztes Training</string>
 
@@ -53,6 +59,11 @@
     <string name="average_total">Gesamtschnitt:</string>
 
     <string name="select_stats_spinner_prompt">Statistik wählen...</string>
+
+    <string name="import_alert_title">Daten importieren?</string>
+    <string name="import_message">Achtung, beim Import werden alle vorhandenen Daten gelöscht!</string>
+    <string name="import_ok">Ok</string>
+    <string name="import_cancel">Abbrechen</string>
 
     <string-array name="select_stats">
         <item>Alle Runden</item>

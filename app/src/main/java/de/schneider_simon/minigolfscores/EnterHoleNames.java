@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 public class EnterHoleNames extends ActionBarActivity {
@@ -128,6 +129,13 @@ public class EnterHoleNames extends ActionBarActivity {
                 holeNamesDb.insert("HoleNames", null, values);
             else
                 holeNamesDb.update("HoleNames", values, "club='"+ selectedClub +"'", null);
+
+            confirmHoleNamesSave();
         }
+    }
+
+    private void confirmHoleNamesSave(){
+        Toast toast = Toast.makeText(this.getApplicationContext(), getString(R.string.save_hole_names_confirm), Toast.LENGTH_SHORT);
+        toast.show();
     }
 }
